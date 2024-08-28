@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabletopTournaments.Core", "TabletopTournaments.Core\TabletopTournaments.Core.csproj", "{0FA0AAA8-DDDC-4D09-B327-A818617EB846}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabletopTournaments.Infrastructure", "TabletopTournaments.Infrastructure\TabletopTournaments.Infrastructure.csproj", "{0A236694-3EE6-44A2-8921-1B4218593151}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabletopTournaments.Application", "TabletopTournaments.Application\TabletopTournaments.Application.csproj", "{6D5CD784-0050-491A-8DF2-EE711FE248F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabletopTournaments.API", "TabletopTournaments.API\TabletopTournaments.API.csproj", "{D5848616-055C-444E-8CA5-EAC85C1BEB1F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FA0AAA8-DDDC-4D09-B327-A818617EB846}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA0AAA8-DDDC-4D09-B327-A818617EB846}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA0AAA8-DDDC-4D09-B327-A818617EB846}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA0AAA8-DDDC-4D09-B327-A818617EB846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A236694-3EE6-44A2-8921-1B4218593151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A236694-3EE6-44A2-8921-1B4218593151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A236694-3EE6-44A2-8921-1B4218593151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A236694-3EE6-44A2-8921-1B4218593151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D5CD784-0050-491A-8DF2-EE711FE248F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D5CD784-0050-491A-8DF2-EE711FE248F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D5CD784-0050-491A-8DF2-EE711FE248F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D5CD784-0050-491A-8DF2-EE711FE248F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5848616-055C-444E-8CA5-EAC85C1BEB1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5848616-055C-444E-8CA5-EAC85C1BEB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5848616-055C-444E-8CA5-EAC85C1BEB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5848616-055C-444E-8CA5-EAC85C1BEB1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
