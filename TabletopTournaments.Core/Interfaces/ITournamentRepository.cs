@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TabletopTournaments.Core.Entities;
 
 namespace TabletopTournaments.Core.Interfaces
 {
     public interface ITournamentRepository
     {
+        Task AddAsync(Tournament tournament);
     }
 }

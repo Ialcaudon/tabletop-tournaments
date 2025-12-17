@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TabletopTournaments.Core\TabletopTournaments.Core.csproj" />
+    <ProjectReference Include="..\TabletopTournaments.Application\TabletopTournaments.Application.csproj" />
   </ItemGroup>
 
 </Project>
