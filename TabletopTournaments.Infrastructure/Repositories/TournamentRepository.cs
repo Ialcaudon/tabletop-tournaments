@@ -16,6 +16,12 @@ namespace TabletopTournaments.Infrastructure.Repositories
         {
             await _dbContext.Tournaments.AddAsync(tournament);
         }
+
+        public async Task<IEnumerable<Tournament>> GetAllAsync()
+        {
+            return await Task.FromResult(_dbContext.Tournaments.ToList());
+        }
+
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();

@@ -1,6 +1,4 @@
-using TabletopTournaments.Application.Players.Commands.RegisterPlayer;
-using TabletopTournaments.Application.Tournaments.Commands.CreateTournament;
-using TabletopTournaments.Application.Tournaments.Queries.GetAllTournaments;
+using TabletopTournaments.Application.Services;
 using TabletopTournaments.Core.Interfaces;
 using TabletopTournaments.Infrastructure.Repositories;
 
@@ -27,10 +25,9 @@ public class Startup
         services.AddSingleton<ITournamentRepository, InMemoryTournamentRepository>();
         services.AddSingleton<IPlayerRepository, InMemoryPlayerRepository>();
 
-        // Handlers
-        services.AddTransient<CreateTournamentCommandHandler>();
-        services.AddTransient<RegisterPlayerCommandHandler>();
-        services.AddTransient<GetAllTournamentsQueryHandler>();
+        // Application Services
+        services.AddTransient<ITournamentService, TournamentService>();
+        services.AddTransient<IPlayerService, PlayerService>();
     }
 
     // Este método se llama en tiempo de ejecución y se utiliza para configurar la canalización de solicitudes HTTP.

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using TabletopTournaments.Application.Tournaments.Commands.CreateTournament;
-using TabletopTournaments.Application.Tournaments.Queries.GetAllTournaments;
+using TabletopTournaments.Application.Services;
+using TabletopTournaments.Core.Enums;
 
 namespace TabletopTournaments.API.Controllers
 {
@@ -8,32 +8,37 @@ namespace TabletopTournaments.API.Controllers
     [Route("api/[controller]")]
     public class TournamentsController : ControllerBase
     {
-        private readonly CreateTournamentCommandHandler _createTournamentHandler;
-        private readonly GetAllTournamentsQueryHandler _getAllTournamentsHandler;
+        private readonly ITournamentService _tournamentService;
 
-        public TournamentsController(CreateTournamentCommandHandler createTournamentHandler, GetAllTournamentsQueryHandler getAllTournamentsHandler)
+        public TournamentsController(ITournamentService tournamentService)
         {
-            _createTournamentHandler = createTournamentHandler;
-            _getAllTournamentsHandler = getAllTournamentsHandler;
+            _tournamentService = tournamentService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTournamentCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateTournamentRequest request)
         {
-            if (command == null)
+            if (request == null || string.IsNullOrWhiteSpace(request.Name))
             {
                 return BadRequest();
             }
 
-            var id = await _createTournamentHandler.Handle(command, CancellationToken.None);
+            var id = await _tournamentService.CreateTournamentAsync(request.Name, request.Date, request.GameSystem);
             return CreatedAtAction(nameof(Create), new { id }, id);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var tournaments = await _getAllTournamentsHandler.Handle(new GetAllTournamentsQuery(), CancellationToken.None);
+            var tournaments = await _tournamentService.GetAllTournamentsAsync();
             return Ok(tournaments);
         }
+    }
+
+    public class CreateTournamentRequest
+    {
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
+        public GameSystem GameSystem { get; set; }
     }
 }
