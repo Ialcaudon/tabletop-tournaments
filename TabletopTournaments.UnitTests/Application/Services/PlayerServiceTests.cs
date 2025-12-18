@@ -24,15 +24,13 @@ namespace TabletopTournaments.UnitTests.Application.Services
         {
             // Arrange
             var name = "John Doe";
-            var email = "john@example.com";
 
             // Act
-            int playerId = await _service.RegisterPlayerAsync(name, email);
+            int playerId = await _service.RegisterPlayerAsync(name);
 
             // Assert
             _playerRepositoryMock.Verify(x => x.AddAsync(It.Is<Player>(p =>
-                p.Name == name &&
-                p.Email == email
+                p.Name == name
             )), Times.Once);
         }
     }

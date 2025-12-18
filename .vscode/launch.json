@@ -14,10 +14,6 @@
       "cwd": "${workspaceFolder}/TabletopTournaments.API",
       "stopAtEntry": false,
       "console": "integratedTerminal",
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-      },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

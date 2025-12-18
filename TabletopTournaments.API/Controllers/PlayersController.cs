@@ -17,12 +17,12 @@ namespace TabletopTournaments.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterPlayerRequest request)
         {
-            if (request == null || string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Email))
+            if (request == null || string.IsNullOrWhiteSpace(request.Name))
             {
                 return BadRequest();
             }
 
-            var id = await _playerService.RegisterPlayerAsync(request.Name, request.Email);
+            var id = await _playerService.RegisterPlayerAsync(request.Name);
             return CreatedAtAction(nameof(Register), new { id }, id);
         }
     }
@@ -30,6 +30,5 @@ namespace TabletopTournaments.API.Controllers
     public class RegisterPlayerRequest
     {
         public string Name { get; set; }
-        public string Email { get; set; }
     }
 }
