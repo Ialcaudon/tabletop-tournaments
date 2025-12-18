@@ -22,22 +22,25 @@ dotnet build
 
 ### 3. Run the project
 
-#### Using VS Code (Recommended)
-1. Open the folder in VS Code.
-2. Press **F5** (or go to **Run and Debug** > **.NET Core Launch (web)**).
-3. The browser will automatically open to valid endpoints, or you can navigate to the Swagger documentation manually.
-
-#### Using Terminal
+#### Using Terminal (Universal)
+This works in any editor or terminal.
 ```bash
-dotnet run --project TabletopTournaments.API/TabletopTournaments.API.csproj
+dotnet run --project TabletopTournaments.API/TabletopTournaments.API.csproj --launch-profile https
 ```
+The application will start and listen on the configured ports (usually **https://localhost:7187**).
+
+#### Using VS Code (Optional)
+If your editor supports VS Code compatible launch configurations (like the `.vscode` folder):
+1. Open the "Run and Debug" panel.
+2. Select **.NET Core Launch (web)**.
+3. Start debugging.
 
 ## API Documentation (Swagger)
 
 When running in **Development** mode (which is default for VS Code launch), Swagger UI is available at:
 
 ```
-https://localhost:7084/swagger
+https://localhost:7187/swagger
 ```
 *(Note: Port may vary, check your `launchSettings.json` or terminal output)*
 
