@@ -13,7 +13,6 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    // Este método se llama en tiempo de ejecución y se utiliza para agregar servicios al contenedor.
     public void ConfigureServices(IServiceCollection services)
     {
         // Add services to the container.
@@ -30,7 +29,6 @@ public class Startup
         services.AddTransient<IPlayerService, PlayerService>();
     }
 
-    // Este método se llama en tiempo de ejecución y se utiliza para configurar la canalización de solicitudes HTTP.
     public void Configure(WebApplication app, IWebHostEnvironment env)
     {
         // Configure the HTTP request pipeline.
