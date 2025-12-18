@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabletopTournaments.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabletopTournaments.API", "TabletopTournaments.API\TabletopTournaments.API.csproj", "{D5848616-055C-444E-8CA5-EAC85C1BEB1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletopTournaments.UnitTests", "TabletopTournaments.UnitTests\TabletopTournaments.UnitTests.csproj", "{58BB52EE-D6CD-4EA8-853D-B4531294CD44}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletopTournaments.UnitTests", "..\tests\TabletopTournaments.UnitTests\TabletopTournaments.UnitTests.csproj", "{0202785A-699C-48A7-AC60-D9DF003DEE1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +39,10 @@ Global
 		{58BB52EE-D6CD-4EA8-853D-B4531294CD44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58BB52EE-D6CD-4EA8-853D-B4531294CD44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58BB52EE-D6CD-4EA8-853D-B4531294CD44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0202785A-699C-48A7-AC60-D9DF003DEE1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0202785A-699C-48A7-AC60-D9DF003DEE1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0202785A-699C-48A7-AC60-D9DF003DEE1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0202785A-699C-48A7-AC60-D9DF003DEE1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

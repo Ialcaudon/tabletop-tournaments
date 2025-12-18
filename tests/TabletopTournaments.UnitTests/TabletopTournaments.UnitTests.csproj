@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TabletopTournaments.Core\TabletopTournaments.Core.csproj" />
-    <ProjectReference Include="..\TabletopTournaments.Application\TabletopTournaments.Application.csproj" />
+    <ProjectReference Include="..\..\src\TabletopTournaments.API\TabletopTournaments.API.csproj" />
+    <ProjectReference Include="..\..\src\TabletopTournaments.Core\TabletopTournaments.Core.csproj" />
   </ItemGroup>
 
 </Project>
