@@ -56,6 +56,8 @@ jobs:
           ACCEPT_EULA: Y
           MSSQL_PID: Express
           MSSQL_SA_PASSWORD: ${{ secrets.SA_PASSWORD }}
+        volumes: 
+          - sqlserver_data:/var/opt/mssql
         options: >-
           --health-cmd "echo 'SELECT 1' | /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD"
           --health-interval 10s
