@@ -40,9 +40,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Run unit tests
-        run: dotnet test tests/TabletopTournaments.UnitTests/TabletopTournaments.UnitTests.csproj \
-              --configuration Release \
-              --no-build
+        run: dotnet test tests/TabletopTournaments.UnitTests/TabletopTournaments.UnitTests.csproj --configuration Release --no-build
 
   integration-tests:
     name: Integration Tests
@@ -75,6 +73,4 @@ jobs:
       - name: Run integration tests
         env:
           SA_PASSWORD: ${{ secrets.SA_PASSWORD }}
-        run: dotnet test tests/TabletopTournaments.IntegrationTests/TabletopTournaments.IntegrationTests.csproj \
-              --configuration Release \
-              --no-build
+        run: dotnet test tests/TabletopTournaments.IntegrationTests/TabletopTournaments.IntegrationTests.csproj --configuration Release --no-build
