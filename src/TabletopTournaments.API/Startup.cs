@@ -1,6 +1,8 @@
 using TabletopTournaments.Application.Services;
 using TabletopTournaments.Core.Interfaces;
 using TabletopTournaments.Infrastructure.Repositories;
+using TabletopTournaments.Infrastructure.DbContexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace TabletopTournaments.API;
 
@@ -20,9 +22,13 @@ public class Startup
         services.AddSwaggerGen();
         services.AddControllers();
 
-        // Repositories (Singleton for InMemory persistence)
-        services.AddSingleton<ITournamentRepository, InMemoryTournamentRepository>();
-        services.AddSingleton<IPlayerRepository, InMemoryPlayerRepository>();
+        // DbContext
+        services.AddDbContext<TabletopTournamentsDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+        // Repositories
+        services.AddScoped<ITournamentRepository, TournamentRepository>();
+        services.AddScoped<IPlayerRepository, PlayerRepository>();
 
         // Application Services
         services.AddTransient<ITournamentService, TournamentService>();

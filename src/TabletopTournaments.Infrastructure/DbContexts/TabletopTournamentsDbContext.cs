@@ -6,6 +6,7 @@ namespace TabletopTournaments.Infrastructure.DbContexts
     public class TabletopTournamentsDbContext : DbContext
     {
         public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<Player> Players { get; set; }
         public TabletopTournamentsDbContext(DbContextOptions options) 
             : base(options)
         {
