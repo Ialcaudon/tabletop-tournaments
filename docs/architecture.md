@@ -9,7 +9,7 @@ This project follows a simplified Domain-Driven Design (DDD) architecture for a 
 - **Infrastructure**: Implements repository interfaces using EF Core (currently transitioning from in-memory to SQL Server). Includes DbContext and entity configurations.
 - **API**: ASP.NET Core controllers that inject services and handle HTTP requests/responses.
 - **UnitTests**: xUnit tests with Moq and FluentAssertions for unit testing services and domain logic.
-- **IntegrationTests**: Planned for end-to-end testing of infrastructure and API interactions.
+- **IntegrationTests**: Implemented for end-to-end testing of infrastructure and API interactions.
 
 ## Key Patterns
 - **Entities**: Use private setters and public constructors for validation (e.g., `Tournament(string name, DateTime date, GameSystem gameSystem)`).

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabletopTournaments.API", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletopTournaments.UnitTests", "..\tests\TabletopTournaments.UnitTests\TabletopTournaments.UnitTests.csproj", "{0202785A-699C-48A7-AC60-D9DF003DEE1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletopTournaments.IntegrationTests", "..\tests\TabletopTournaments.IntegrationTests\TabletopTournaments.IntegrationTests.csproj", "{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,14 +37,14 @@ Global
 		{D5848616-055C-444E-8CA5-EAC85C1BEB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5848616-055C-444E-8CA5-EAC85C1BEB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5848616-055C-444E-8CA5-EAC85C1BEB1F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58BB52EE-D6CD-4EA8-853D-B4531294CD44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58BB52EE-D6CD-4EA8-853D-B4531294CD44}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58BB52EE-D6CD-4EA8-853D-B4531294CD44}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58BB52EE-D6CD-4EA8-853D-B4531294CD44}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0202785A-699C-48A7-AC60-D9DF003DEE1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0202785A-699C-48A7-AC60-D9DF003DEE1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0202785A-699C-48A7-AC60-D9DF003DEE1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0202785A-699C-48A7-AC60-D9DF003DEE1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

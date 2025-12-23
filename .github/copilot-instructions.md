@@ -7,7 +7,7 @@ This is a simplified Domain-Driven Design (DDD) .NET 8 Web API. Layers:
 - **Infrastructure**: Repository implementations (currently in-memory, EF Core ready with DbContext and entity configs).
 - **API**: ASP.NET Core controllers injecting services directly.
 - **UnitTests**: xUnit tests with Moq and FluentAssertions.
-- **IntegrationTests**: Planned for future integration tests.
+- **IntegrationTests**: xUnit tests for end-to-end validation of infrastructure (e.g., repository persistence to SQL Server).
 
 ## Key Patterns
 - Entities: Private setters, protected EF constructor, validation in public constructor, e.g., `Tournament(string name, DateTime date, GameSystem gameSystem)`.
