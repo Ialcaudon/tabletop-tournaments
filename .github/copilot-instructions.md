@@ -1,7 +1,7 @@
 # AI Coding Guidelines for Tabletop Tournaments
 
 ## Architecture Overview
-This is a simplified Domain-Driven Design (DDD) .NET 8 Web API. Layers:
+This is a simplified Domain-Driven Design (DDD) .NET 9 Web API. Layers:
 - **Core/Domain**: Domain entities, value objects, interfaces, enums. Entities use private setters and constructor validation.
 - **Application**: Application services that orchestrate domain logic and handle use cases.
 - **Infrastructure**: Repository implementations (currently in-memory, EF Core ready with DbContext and entity configs).

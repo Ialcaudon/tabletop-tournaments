@@ -1,7 +1,7 @@
 # Tabletop Tournaments Architecture
 
 ## Overview
-This project follows a simplified Domain-Driven Design (DDD) architecture for a .NET 8 Web API managing tabletop tournaments. The system allows users to create and manage tournaments, players, and related entities.
+This project follows a simplified Domain-Driven Design (DDD) architecture for a .NET 9 Web API managing tabletop tournaments. The system allows users to create and manage tournaments, players, and related entities.
 
 ## Layers
 - **Core/Domain**: Contains domain entities, value objects, interfaces, and enums. Entities enforce business rules with private setters and constructor validation.
