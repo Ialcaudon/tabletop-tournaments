@@ -4,7 +4,7 @@
 
 **Prioridad:** Alta  
 
-**Estado:** IN_PROGRESS  
+**Estado:** DONE  
 
 **Tasks:**  
 - Elegir imagen de Docker: Usar mcr.microsoft.com/mssql/server:latest para SQL Server.  
