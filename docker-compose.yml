@@ -11,6 +11,7 @@ services:
     environment:
       ACCEPT_EULA: Y
       MSSQL_PID: Express
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     volumes:
       - sqlserver_data:/var/opt/mssql
     restart: unless-stopped
