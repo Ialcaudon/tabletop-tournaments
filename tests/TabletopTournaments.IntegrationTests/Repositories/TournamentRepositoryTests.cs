@@ -24,7 +24,6 @@ public class TournamentRepositoryTests : IClassFixture<IntegrationTestFixture>
 
         // Act
         await repository.AddAsync(tournament);
-        await repository.SaveChangesAsync();
 
         // Assert
         var tournaments = await repository.GetAllAsync();
