@@ -21,10 +21,10 @@ jobs:
           dotnet-version: 9.0.x
 
       - name: Restore
-        run: dotnet restore src/TabletopTournaments.sln
+        run: dotnet restore TabletopTournaments.sln
 
       - name: Build
-        run: dotnet build src/TabletopTournaments.sln --no-restore --configuration Release
+        run: dotnet build TabletopTournaments.sln --no-restore --configuration Release
 
   unit-tests:
     name: Unit Tests
