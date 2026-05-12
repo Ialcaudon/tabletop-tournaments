@@ -1,44 +1,94 @@
-using System;
 using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Testcontainers.MsSql;
 using TabletopTournaments.Infrastructure.DbContexts;
 using Xunit;
 
 namespace TabletopTournaments.IntegrationTests;
 
-public class IntegrationTestFixture : IDisposable
+public class IntegrationTestFixture : IAsyncLifetime
 {
-    public TabletopTournamentsDbContext DbContext { get; }
+    private readonly MsSqlContainer _sqlContainer;
+    public TabletopTournamentsDbContext DbContext { get; private set; } = null!;
 
     public IntegrationTestFixture()
     {
         var password = GetSaPassword();
-        var connectionString = $"Server=localhost,1433;Database=TabletopTournamentsTest;User Id=sa;Password={password};TrustServerCertificate=True;";
+        _sqlContainer = new MsSqlBuilder()
+            .WithPassword(password)
+            .Build();
+    }
+
+    public async Task InitializeAsync()
+    {
+        await _sqlContainer.StartAsync();
+
+        var sqlConnectionBuilder = new SqlConnectionStringBuilder(_sqlContainer.GetConnectionString())
+        {
+            InitialCatalog = "TabletopTournamentsTest",
+            TrustServerCertificate = true
+        };
 
         var options = new DbContextOptionsBuilder<TabletopTournamentsDbContext>()
-            .UseSqlServer(connectionString)
+            .UseSqlServer(sqlConnectionBuilder.ConnectionString)
             .Options;
 
         DbContext = new TabletopTournamentsDbContext(options);
-        DbContext.Database.EnsureCreated();
+        await DbContext.Database.EnsureCreatedAsync();
     }
 
     private static string GetSaPassword()
     {
-        var password = Environment.GetEnvironmentVariable("SA_PASSWORD");
+        var password = Environment.GetEnvironmentVariable("SA_PASSWORD")
+            ?? Environment.GetEnvironmentVariable("MSSQL_SA_PASSWORD");
 
         if (string.IsNullOrWhiteSpace(password))
         {
-            throw new InvalidOperationException("SA_PASSWORD environment variable not set.");
+            password = TryReadSaPasswordFromDotEnv();
         }
 
-        return password;
+        return string.IsNullOrWhiteSpace(password) ? "YourStrong!Passw0rd" : password;
     }
 
-
-    public void Dispose()
+    private static string? TryReadSaPasswordFromDotEnv()
     {
-        DbContext.Database.EnsureDeleted();
-        DbContext.Dispose();
+        var directory = AppContext.BaseDirectory;
+
+        while (!string.IsNullOrWhiteSpace(directory))
+        {
+            var envPath = Path.Combine(directory, ".env");
+            if (File.Exists(envPath))
+            {
+                foreach (var rawLine in File.ReadAllLines(envPath))
+                {
+                    var line = rawLine.Trim();
+                    if (line.StartsWith("#") || !line.StartsWith("SA_PASSWORD=", StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
+                    return line["SA_PASSWORD=".Length..].Trim();
+                }
+
+                return null;
+            }
+
+            directory = Directory.GetParent(directory)?.FullName;
+        }
+
+        return null;
+    }
+
+    public async Task DisposeAsync()
+    {
+        if (DbContext is not null)
+        {
+            await DbContext.Database.EnsureDeletedAsync();
+            await DbContext.DisposeAsync();
+        }
+
+        await _sqlContainer.DisposeAsync();
     }
 }
