@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TabletopTournaments.Core.Entities;
 using TabletopTournaments.Core.Interfaces;
 using TabletopTournaments.Infrastructure.DbContexts;
@@ -16,6 +17,16 @@ namespace TabletopTournaments.Infrastructure.Repositories
         {
             await _dbContext.Players.AddAsync(player);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Player?> GetByIdAsync(int id)
+        {
+            return await _dbContext.Players.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Player>> GetAllAsync()
+        {
+            return await _dbContext.Players.ToListAsync();
         }
     }
 }

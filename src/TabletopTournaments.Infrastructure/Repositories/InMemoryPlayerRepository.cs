@@ -21,5 +21,16 @@ namespace TabletopTournaments.Infrastructure.Repositories
             _players.TryAdd(player.Id, player);
             return Task.CompletedTask;
         }
+
+        public Task<Player?> GetByIdAsync(int id)
+        {
+            _players.TryGetValue(id, out var player);
+            return Task.FromResult(player);
+        }
+
+        public Task<IEnumerable<Player>> GetAllAsync()
+        {
+            return Task.FromResult(_players.Values.AsEnumerable());
+        }
     }
 }

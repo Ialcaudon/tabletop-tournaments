@@ -37,6 +37,12 @@ namespace TabletopTournaments.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
+        public Task<Tournament?> GetByIdAsync(int id)
+        {
+            _tournaments.TryGetValue(id, out var tournament);
+            return Task.FromResult(tournament);
+        }
+
         public Task<IEnumerable<Tournament>> GetAllAsync()
         {
             return Task.FromResult(_tournaments.Values.AsEnumerable());

@@ -11,7 +11,7 @@ namespace TabletopTournaments.IntegrationTests;
 public class IntegrationTestFixture : IAsyncLifetime
 {
     private readonly MsSqlContainer _sqlContainer;
-    public TabletopTournamentsDbContext DbContext { get; private set; } = null!;
+    private string _connectionString = null!;
 
     public IntegrationTestFixture()
     {
@@ -31,12 +31,19 @@ public class IntegrationTestFixture : IAsyncLifetime
             TrustServerCertificate = true
         };
 
+        _connectionString = sqlConnectionBuilder.ConnectionString;
+
+        await using var dbContext = CreateDbContext();
+        await dbContext.Database.EnsureCreatedAsync();
+    }
+
+    public TabletopTournamentsDbContext CreateDbContext()
+    {
         var options = new DbContextOptionsBuilder<TabletopTournamentsDbContext>()
-            .UseSqlServer(sqlConnectionBuilder.ConnectionString)
+            .UseSqlServer(_connectionString)
             .Options;
 
-        DbContext = new TabletopTournamentsDbContext(options);
-        await DbContext.Database.EnsureCreatedAsync();
+        return new TabletopTournamentsDbContext(options);
     }
 
     private static string GetSaPassword()
@@ -83,11 +90,6 @@ public class IntegrationTestFixture : IAsyncLifetime
 
     public async Task DisposeAsync()
     {
-        if (DbContext is not null)
-        {
-            await DbContext.Database.EnsureDeletedAsync();
-            await DbContext.DisposeAsync();
-        }
 
         await _sqlContainer.DisposeAsync();
     }

@@ -5,6 +5,7 @@ namespace TabletopTournaments.Core.Interfaces
     public interface ITournamentRepository
     {
         Task AddAsync(Tournament tournament);
+        Task<Tournament?> GetByIdAsync(int id);
         Task<IEnumerable<Tournament>> GetAllAsync();
     }
 }
