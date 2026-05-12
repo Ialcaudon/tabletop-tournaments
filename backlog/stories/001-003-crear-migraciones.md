@@ -4,8 +4,17 @@
 
 **Prioridad:** Alta  
 
-**Estado:** DRAFT  
+**Estado:** DONE  
 
 **Tasks:**  
-- Ejecutar `dotnet ef migrations add InitialCreate`.  
-- Aplicar migraciones al DB.
+- [x] Instalar paquete `Microsoft.EntityFrameworkCore.Design` en el proyecto API (necesario para el tooling de EF).  
+- [x] Verificar/instalar la herramienta global `dotnet-ef`.  
+- [x] Ejecutar `dotnet ef migrations add InitialCreate` (target: Infrastructure, startup: API).  
+- [x] Levantar el contenedor Docker de SQL Server.  
+- [x] Corregir connection string en appsettings.json (alinear contraseña con .env).  
+- [x] Aplicar la migración con `dotnet ef database update`.  
+- [x] Verificar que las tablas `Players` y `Tournaments` existen en la BD.  
+
+**Requisitos previos:**  
+- Story 001-001 (Docker SQL Server) completada.  
+- Story 001-002 (EF Core configurado con SQL Server) completada.
