@@ -1,6 +1,7 @@
 # Epic 005: Infraestructura
 
 **Descripción:** Planificar despliegues, elegir servicios cloud y configurar CI/CD para API, DB y frontend.  
+- Quiero infrastructura como codigo, ejemplo Terraform o similar, para facilitar despliegues y mantenimiento.
 
 **Prioridad:** Baja (último paso, una vez funcional).  
 
