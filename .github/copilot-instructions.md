@@ -4,7 +4,7 @@
 This is a simplified Domain-Driven Design (DDD) .NET 9 Web API. Layers:
 - **Core/Domain**: Domain entities, value objects, interfaces, enums. Entities use private setters and constructor validation.
 - **Application**: Application services that orchestrate domain logic and handle use cases.
-- **Infrastructure**: Repository implementations (currently in-memory, EF Core ready with DbContext and entity configs).
+- **Infrastructure**: Repository implementations with EF Core (SQL Server), DbContext and entity configs. In-memory repos kept for reference.
 - **API**: ASP.NET Core controllers injecting services directly.
 - **UnitTests**: xUnit tests with Moq and FluentAssertions.
 - **IntegrationTests**: xUnit tests for end-to-end validation of infrastructure (e.g., repository persistence to SQL Server).
@@ -30,10 +30,15 @@ This is a simplified Domain-Driven Design (DDD) .NET 9 Web API. Layers:
 - Tests mock repositories, verify service calls with FluentAssertions.
 - Name methods/classes descriptively, follow C# conventions.
 - No comments unless necessary for clarity.
-- Register services as transient, repos as singleton in Startup.cs.
+- Register services as transient, repos as scoped in Startup.cs.
 
 ## Examples
 - New feature: Add service method in Application/Services/, inject in controller, register in Startup.cs.
 - Entity: Add to Core/Entities/, with private setters and validation.
-- Test: Mock repo, assert service calls repo methods with correct parameters.</content>
+- Test: Mock repo, assert service calls repo methods with correct parameters.
+
+## Backlog Management
+- When completing a story or task, update its **Estado** to `DONE` in the corresponding `backlog/stories/` markdown file.
+- Mark individual tasks with `[x]` when completed.
+- This must be done as part of finishing any implementation work — do not forget.</content>
 <parameter name="filePath">/Users/ignacio/Repos/tabletop-tournaments/.github/copilot-instructions.md
