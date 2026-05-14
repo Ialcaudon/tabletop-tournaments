@@ -98,5 +98,32 @@ namespace TabletopTournaments.UnitTests.Application.Services
 
             result.Should().BeFalse();
         }
+
+        [Fact]
+        public async Task UpdateTournamentAsync_ShouldReturnTrue_WhenTournamentExists()
+        {
+            var tournament = new Tournament("Old Name", DateTime.Today.AddDays(5), GameSystem.Generic);
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
+
+            var newDate = DateTime.Today.AddDays(15);
+            var result = await _service.UpdateTournamentAsync(1, "New Name", newDate, GameSystem.WarhammerAoS);
+
+            result.Should().BeTrue();
+            tournament.Name.Should().Be("New Name");
+            tournament.Date.Should().Be(newDate);
+            tournament.GameSystem.Should().Be(GameSystem.WarhammerAoS);
+            _tournamentRepositoryMock.Verify(x => x.UpdateAsync(tournament), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdateTournamentAsync_ShouldReturnFalse_WhenTournamentDoesNotExist()
+        {
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(999)).ReturnsAsync((Tournament?)null);
+
+            var result = await _service.UpdateTournamentAsync(999, "Name", DateTime.Today, GameSystem.Generic);
+
+            result.Should().BeFalse();
+            _tournamentRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Tournament>()), Times.Never);
+        }
     }
 }

@@ -4,8 +4,12 @@
 
 **Prioridad:** Alta  
 
-**Estado:** DRAFT  
+**Estado:** DONE  
 
 **Tasks:**  
-- Extender TournamentsController con método PUT.  
-- Validar entrada y llamar a TournamentService para actualizar.
+- [x] Añadir método Update en la entidad Tournament.  
+- [x] Extender ITournamentService con método UpdateTournamentAsync.  
+- [x] Implementar UpdateTournamentAsync en TournamentService.  
+- [x] Extender TournamentsController con método PUT.  
+- [x] Validar entrada y retornar NotFound/BadRequest según corresponda.  
+- [x] Añadir tests unitarios para UpdateTournamentAsync.

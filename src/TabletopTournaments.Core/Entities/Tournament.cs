@@ -26,6 +26,16 @@ namespace TabletopTournaments.Core.Entities
             GameSystem = gameSystem;
         }
 
+        public void Update(string name, DateTime date, GameSystem gameSystem)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Tournament name cannot be empty", nameof(name));
+
+            Name = name;
+            Date = date;
+            GameSystem = gameSystem;
+        }
+
         public void AddPlayer(Player player)
         {
             if (player == null)

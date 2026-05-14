@@ -56,9 +56,29 @@ namespace TabletopTournaments.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateTournamentRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.Name))
+                return BadRequest();
+
+            var result = await _tournamentService.UpdateTournamentAsync(id, request.Name, request.Date, request.GameSystem);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
     }
 
     public class CreateTournamentRequest
+    {
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
+        public GameSystem GameSystem { get; set; }
+    }
+
+    public class UpdateTournamentRequest
     {
         public string Name { get; set; }
         public DateTime Date { get; set; }

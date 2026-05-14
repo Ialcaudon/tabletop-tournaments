@@ -48,4 +48,15 @@ public class TournamentService : ITournamentService
         await _tournamentRepository.UpdateAsync(tournament);
         return true;
     }
+
+    public async Task<bool> UpdateTournamentAsync(int id, string name, DateTime date, GameSystem gameSystem)
+    {
+        var tournament = await _tournamentRepository.GetByIdAsync(id);
+        if (tournament == null)
+            return false;
+
+        tournament.Update(name, date, gameSystem);
+        await _tournamentRepository.UpdateAsync(tournament);
+        return true;
+    }
 }
