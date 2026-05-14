@@ -4,8 +4,8 @@
 
 **Prioridad:** Alta  
 
-**Estado:** DRAFT  
+**Estado:** DONE  
 
 **Tasks:**  
-- Extender TournamentsController con método POST.  
-- Validar entrada y llamar a TournamentService.
+- [x] Extender TournamentsController con método POST.  
+- [x] Validar entrada y llamar a TournamentService.

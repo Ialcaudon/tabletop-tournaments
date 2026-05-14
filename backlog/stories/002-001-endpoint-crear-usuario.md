@@ -4,8 +4,8 @@
 
 **Prioridad:** Alta  
 
-**Estado:** DRAFT  
+**Estado:** DONE  
 
 **Tasks:**  
-- Extender PlayersController con método POST.  
-- Validar entrada y llamar a PlayerService.
+- [x] Extender PlayersController con método POST.  
+- [x] Validar entrada y llamar a PlayerService.
