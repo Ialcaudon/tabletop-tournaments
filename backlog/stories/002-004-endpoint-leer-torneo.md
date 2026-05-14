@@ -4,8 +4,12 @@
 
 **Prioridad:** Alta  
 
-**Estado:** DRAFT  
+**Estado:** DONE  
 
 **Tasks:**  
-- Extender TournamentsController con método GET.  
-- Llamar a TournamentService para obtener datos.
+- [x] Extender ITournamentService con método GetTournamentByIdAsync.  
+- [x] Implementar GetTournamentByIdAsync en TournamentService.  
+- [x] Extender TournamentsController con método GET {id}.  
+- [x] Retornar NotFound cuando el torneo no existe.  
+- [x] Corregir CreatedAtAction del POST para apuntar a GetById.  
+- [x] Añadir tests unitarios para GetTournamentByIdAsync.

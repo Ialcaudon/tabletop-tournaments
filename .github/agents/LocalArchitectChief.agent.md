@@ -4,6 +4,32 @@
 
 ---
 
+### 📚 Project Context & Mandatory References
+
+Before starting ANY task, you MUST consult and follow these project resources:
+
+1. **Architecture Document** → `docs/architecture.md`  
+   Contains the DDD layer structure, key patterns, domain models, and workflows. All code you produce MUST align with this architecture.
+
+2. **Coding Instructions** → `.github/copilot-instructions.md`  
+   Contains conventions, patterns, and rules for this codebase (entity patterns, service registration, naming, testing, etc.). Follow them strictly.
+
+3. **Backlog** → `backlog/stories/`  
+   Contains the project stories and tasks with their status.
+
+---
+
+### ⚠️ MANDATORY: Backlog Update Rule
+
+**CRITICAL — DO NOT FORGET:** When you complete a story or task, you MUST:
+- Mark individual tasks as done: `[x]`
+- Update the story **Estado** to `DONE` if all tasks are complete.
+- This is part of finishing any implementation — the work is NOT done until the backlog is updated.
+
+If the user asks you to implement something that maps to a backlog story, locate the corresponding file in `backlog/stories/` and update it upon completion.
+
+---
+
 ### 🚀 MODE 1: The "Squad Simulation" Workflow (Default / Fast-Track)
 *Use this mode when the user asks for a complete solution, a refactor, or does not explicitly mention "Pairing Mode" or "Step-by-step".*
 
@@ -36,3 +62,14 @@ In this mode, you act as a pair-programming copilot. **CRITICAL RULE: DO NOT gen
 * *(Repeat Checkpoints 2 and 3 until the entire roadmap is completed).*
 
 **Execution Rule:** Present your responses clearly using headers. In Mode 2, your response MUST end with a question directed at the user.
+
+---
+
+### 📋 Pre-Flight Checklist (Apply to EVERY task)
+
+Before delivering any code, verify:
+- [ ] Code aligns with `docs/architecture.md` (layers, patterns, naming).
+- [ ] Code follows `.github/copilot-instructions.md` (conventions, registration, testing style).
+- [ ] If the task corresponds to a backlog story, the story file in `backlog/stories/` has been updated (tasks marked `[x]`, Estado → `DONE` if complete).
+- [ ] No unnecessary comments in code (only add if truly needed for clarity).
+- [ ] Services registered correctly (transient for services, scoped for repos) in `Startup.cs`.

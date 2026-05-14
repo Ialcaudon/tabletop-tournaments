@@ -22,6 +22,11 @@ public class TournamentService : ITournamentService
         return tournament.Id;
     }
 
+    public async Task<Tournament?> GetTournamentByIdAsync(int id)
+    {
+        return await _tournamentRepository.GetByIdAsync(id);
+    }
+
     public async Task<IEnumerable<Tournament>> GetAllTournamentsAsync()
     {
         return await _tournamentRepository.GetAllAsync();

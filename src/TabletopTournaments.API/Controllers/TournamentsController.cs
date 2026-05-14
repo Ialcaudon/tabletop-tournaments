@@ -24,7 +24,17 @@ namespace TabletopTournaments.API.Controllers
             }
 
             var id = await _tournamentService.CreateTournamentAsync(request.Name, request.Date, request.GameSystem);
-            return CreatedAtAction(nameof(Create), new { id }, id);
+            return CreatedAtAction(nameof(GetById), new { id }, id);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var tournament = await _tournamentService.GetTournamentByIdAsync(id);
+            if (tournament == null)
+                return NotFound();
+
+            return Ok(tournament);
         }
 
         [HttpGet]

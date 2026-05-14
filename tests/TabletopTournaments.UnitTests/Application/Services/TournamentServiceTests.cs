@@ -39,5 +39,28 @@ namespace TabletopTournaments.UnitTests.Application.Services
                 t.GameSystem == gameSystem
             )), Times.Once);
         }
+
+        [Fact]
+        public async Task GetTournamentByIdAsync_ShouldReturnTournament_WhenTournamentExists()
+        {
+            var tournament = new Tournament("Test Tournament", DateTime.Today.AddDays(10), GameSystem.Generic);
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
+
+            var result = await _service.GetTournamentByIdAsync(1);
+
+            result.Should().NotBeNull();
+            result!.Name.Should().Be("Test Tournament");
+            _tournamentRepositoryMock.Verify(x => x.GetByIdAsync(1), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetTournamentByIdAsync_ShouldReturnNull_WhenTournamentDoesNotExist()
+        {
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(999)).ReturnsAsync((Tournament?)null);
+
+            var result = await _service.GetTournamentByIdAsync(999);
+
+            result.Should().BeNull();
+        }
     }
 }
