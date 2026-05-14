@@ -15,6 +15,8 @@ namespace TabletopTournaments.Infrastructure.EntityConfigurations
                 .IsRequired();
             builder.Property(x => x.Date)
                 .IsRequired();
+            builder.HasMany(x => x.Players)
+                .WithMany();
         }
     }
 }

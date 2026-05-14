@@ -11,7 +11,9 @@ namespace TabletopTournaments.Core.Entities
         public DateTime Date { get; private set; }
         public GameSystem GameSystem { get; private set; }
 
-        // EF Core Constructor
+        private readonly List<Player> _players = new();
+        public IReadOnlyCollection<Player> Players => _players.AsReadOnly();
+
         protected Tournament() { }
 
         public Tournament(string name, DateTime date, GameSystem gameSystem)
@@ -22,6 +24,17 @@ namespace TabletopTournaments.Core.Entities
             Name = name;
             Date = date;
             GameSystem = gameSystem;
+        }
+
+        public void AddPlayer(Player player)
+        {
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+
+            if (_players.Contains(player))
+                throw new InvalidOperationException("Player is already registered in this tournament");
+
+            _players.Add(player);
         }
     }
 }

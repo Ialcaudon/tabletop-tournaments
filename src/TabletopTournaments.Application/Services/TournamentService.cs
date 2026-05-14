@@ -9,10 +9,12 @@ namespace TabletopTournaments.Application.Services;
 public class TournamentService : ITournamentService
 {
     private readonly ITournamentRepository _tournamentRepository;
+    private readonly IPlayerRepository _playerRepository;
 
-    public TournamentService(ITournamentRepository tournamentRepository)
+    public TournamentService(ITournamentRepository tournamentRepository, IPlayerRepository playerRepository)
     {
         _tournamentRepository = tournamentRepository;
+        _playerRepository = playerRepository;
     }
 
     public async Task<int> CreateTournamentAsync(string name, DateTime date, GameSystem gameSystem)
@@ -30,5 +32,20 @@ public class TournamentService : ITournamentService
     public async Task<IEnumerable<Tournament>> GetAllTournamentsAsync()
     {
         return await _tournamentRepository.GetAllAsync();
+    }
+
+    public async Task<bool> AddPlayerToTournamentAsync(int tournamentId, int playerId)
+    {
+        var tournament = await _tournamentRepository.GetByIdAsync(tournamentId);
+        if (tournament == null)
+            return false;
+
+        var player = await _playerRepository.GetByIdAsync(playerId);
+        if (player == null)
+            return false;
+
+        tournament.AddPlayer(player);
+        await _tournamentRepository.UpdateAsync(tournament);
+        return true;
     }
 }

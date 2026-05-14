@@ -21,12 +21,20 @@ namespace TabletopTournaments.Infrastructure.Repositories
 
         public async Task<Tournament?> GetByIdAsync(int id)
         {
-            return await _dbContext.Tournaments.FindAsync(id);
+            return await _dbContext.Tournaments
+                .Include(t => t.Players)
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<IEnumerable<Tournament>> GetAllAsync()
         {
             return await _dbContext.Tournaments.ToListAsync();
+        }
+
+        public async Task UpdateAsync(Tournament tournament)
+        {
+            _dbContext.Tournaments.Update(tournament);
+            await _dbContext.SaveChangesAsync();
         }
     }
 

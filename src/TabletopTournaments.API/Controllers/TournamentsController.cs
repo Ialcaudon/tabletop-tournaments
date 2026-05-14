@@ -43,6 +43,19 @@ namespace TabletopTournaments.API.Controllers
             var tournaments = await _tournamentService.GetAllTournamentsAsync();
             return Ok(tournaments);
         }
+
+        [HttpPost("{id}/players")]
+        public async Task<IActionResult> AddPlayer(int id, [FromBody] AddPlayerToTournamentRequest request)
+        {
+            if (request == null || request.PlayerId <= 0)
+                return BadRequest();
+
+            var result = await _tournamentService.AddPlayerToTournamentAsync(id, request.PlayerId);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
     }
 
     public class CreateTournamentRequest
@@ -50,5 +63,10 @@ namespace TabletopTournaments.API.Controllers
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public GameSystem GameSystem { get; set; }
+    }
+
+    public class AddPlayerToTournamentRequest
+    {
+        public int PlayerId { get; set; }
     }
 }

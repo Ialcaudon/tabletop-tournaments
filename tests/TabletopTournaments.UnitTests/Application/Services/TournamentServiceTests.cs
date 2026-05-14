@@ -13,26 +13,25 @@ namespace TabletopTournaments.UnitTests.Application.Services
     public class TournamentServiceTests
     {
         private readonly Mock<ITournamentRepository> _tournamentRepositoryMock;
+        private readonly Mock<IPlayerRepository> _playerRepositoryMock;
         private readonly TournamentService _service;
 
         public TournamentServiceTests()
         {
             _tournamentRepositoryMock = new Mock<ITournamentRepository>();
-            _service = new TournamentService(_tournamentRepositoryMock.Object);
+            _playerRepositoryMock = new Mock<IPlayerRepository>();
+            _service = new TournamentService(_tournamentRepositoryMock.Object, _playerRepositoryMock.Object);
         }
 
         [Fact]
         public async Task CreateTournamentAsync_ShouldCreateAndPersistTournament_WhenParametersAreValid()
         {
-            // Arrange
             var name = "Warhammer Fest";
             var date = DateTime.Today.AddDays(30);
             var gameSystem = GameSystem.WarhammerAoS;
 
-            // Act
             int tournamentId = await _service.CreateTournamentAsync(name, date, gameSystem);
 
-            // Assert
             _tournamentRepositoryMock.Verify(x => x.AddAsync(It.Is<Tournament>(t =>
                 t.Name == name &&
                 t.Date == date &&
@@ -61,6 +60,43 @@ namespace TabletopTournaments.UnitTests.Application.Services
             var result = await _service.GetTournamentByIdAsync(999);
 
             result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task AddPlayerToTournamentAsync_ShouldReturnTrue_WhenBothExist()
+        {
+            var tournament = new Tournament("Test", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var player = new Player("John");
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
+            _playerRepositoryMock.Setup(x => x.GetByIdAsync(2)).ReturnsAsync(player);
+
+            var result = await _service.AddPlayerToTournamentAsync(1, 2);
+
+            result.Should().BeTrue();
+            tournament.Players.Should().Contain(player);
+            _tournamentRepositoryMock.Verify(x => x.UpdateAsync(tournament), Times.Once);
+        }
+
+        [Fact]
+        public async Task AddPlayerToTournamentAsync_ShouldReturnFalse_WhenTournamentNotFound()
+        {
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync((Tournament?)null);
+
+            var result = await _service.AddPlayerToTournamentAsync(1, 2);
+
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task AddPlayerToTournamentAsync_ShouldReturnFalse_WhenPlayerNotFound()
+        {
+            var tournament = new Tournament("Test", DateTime.Today.AddDays(5), GameSystem.Generic);
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
+            _playerRepositoryMock.Setup(x => x.GetByIdAsync(2)).ReturnsAsync((Player?)null);
+
+            var result = await _service.AddPlayerToTournamentAsync(1, 2);
+
+            result.Should().BeFalse();
         }
     }
 }

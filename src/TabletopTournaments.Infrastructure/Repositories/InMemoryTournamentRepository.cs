@@ -47,5 +47,11 @@ namespace TabletopTournaments.Infrastructure.Repositories
         {
             return Task.FromResult(_tournaments.Values.AsEnumerable());
         }
+
+        public Task UpdateAsync(Tournament tournament)
+        {
+            _tournaments[tournament.Id] = tournament;
+            return Task.CompletedTask;
+        }
     }
 }

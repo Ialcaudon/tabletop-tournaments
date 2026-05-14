@@ -4,8 +4,8 @@
 
 **Prioridad:** Alta  
 
-**Estado:** DRAFT  
+**Estado:** DONE  
 
 **Tasks:**  
-- Extender TournamentsController con método POST para players.  
-- Llamar a TournamentService para añadir jugador.
+- [x] Extender TournamentsController con método POST para players.  
+- [x] Llamar a TournamentService para añadir jugador.
