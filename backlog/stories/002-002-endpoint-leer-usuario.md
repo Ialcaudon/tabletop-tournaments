@@ -4,8 +4,12 @@
 
 **Prioridad:** Alta  
 
-**Estado:** DRAFT  
+**Estado:** DONE  
 
 **Tasks:**  
-- Extender PlayersController con método GET.  
-- Llamar a PlayerService para obtener datos.
+- [x] Extender IPlayerService con método GetPlayerByIdAsync.  
+- [x] Implementar GetPlayerByIdAsync en PlayerService.  
+- [x] Extender PlayersController con método GET {id}.  
+- [x] Retornar NotFound cuando el jugador no existe.  
+- [x] Corregir CreatedAtAction del POST para apuntar a GetById.  
+- [x] Añadir tests unitarios para GetPlayerByIdAsync.

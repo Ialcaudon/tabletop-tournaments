@@ -6,4 +6,5 @@ namespace TabletopTournaments.Application.Services;
 public interface IPlayerService
 {
     Task<int> RegisterPlayerAsync(string name);
+    Task<Player?> GetPlayerByIdAsync(int id);
 }

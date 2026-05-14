@@ -19,4 +19,9 @@ public class PlayerService : IPlayerService
         await _playerRepository.AddAsync(player);
         return player.Id;
     }
+
+    public async Task<Player?> GetPlayerByIdAsync(int id)
+    {
+        return await _playerRepository.GetByIdAsync(id);
+    }
 }
