@@ -148,5 +148,44 @@ namespace TabletopTournaments.UnitTests.Application.Services
             result.Should().BeFalse();
             _tournamentRepositoryMock.Verify(x => x.DeleteAsync(It.IsAny<Tournament>()), Times.Never);
         }
+
+        [Fact]
+        public async Task RemovePlayerFromTournamentAsync_ShouldReturnTrue_WhenBothExistAndPlayerIsRegistered()
+        {
+            var tournament = new Tournament("Test", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var player = new Player("John");
+            tournament.AddPlayer(player);
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
+            _playerRepositoryMock.Setup(x => x.GetByIdAsync(2)).ReturnsAsync(player);
+
+            var result = await _service.RemovePlayerFromTournamentAsync(1, 2);
+
+            result.Should().BeTrue();
+            tournament.Players.Should().NotContain(player);
+            _tournamentRepositoryMock.Verify(x => x.UpdateAsync(tournament), Times.Once);
+        }
+
+        [Fact]
+        public async Task RemovePlayerFromTournamentAsync_ShouldReturnFalse_WhenTournamentNotFound()
+        {
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync((Tournament?)null);
+
+            var result = await _service.RemovePlayerFromTournamentAsync(1, 2);
+
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task RemovePlayerFromTournamentAsync_ShouldReturnFalse_WhenPlayerNotInTournament()
+        {
+            var tournament = new Tournament("Test", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var player = new Player("John");
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
+            _playerRepositoryMock.Setup(x => x.GetByIdAsync(2)).ReturnsAsync(player);
+
+            var result = await _service.RemovePlayerFromTournamentAsync(1, 2);
+
+            result.Should().BeFalse();
+        }
     }
 }

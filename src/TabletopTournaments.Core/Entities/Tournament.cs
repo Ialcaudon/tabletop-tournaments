@@ -46,5 +46,16 @@ namespace TabletopTournaments.Core.Entities
 
             _players.Add(player);
         }
+
+        public void RemovePlayer(Player player)
+        {
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+
+            if (!_players.Contains(player))
+                throw new InvalidOperationException("Player is not registered in this tournament");
+
+            _players.Remove(player);
+        }
     }
 }

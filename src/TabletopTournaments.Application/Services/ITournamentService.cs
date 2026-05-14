@@ -14,4 +14,5 @@ public interface ITournamentService
     Task<bool> AddPlayerToTournamentAsync(int tournamentId, int playerId);
     Task<bool> UpdateTournamentAsync(int id, string name, DateTime date, GameSystem gameSystem);
     Task<bool> DeleteTournamentAsync(int id);
+    Task<bool> RemovePlayerFromTournamentAsync(int tournamentId, int playerId);
 }

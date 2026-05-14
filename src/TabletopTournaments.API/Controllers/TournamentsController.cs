@@ -79,6 +79,16 @@ namespace TabletopTournaments.API.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{id}/players/{playerId}")]
+        public async Task<IActionResult> RemovePlayer(int id, int playerId)
+        {
+            var result = await _tournamentService.RemovePlayerFromTournamentAsync(id, playerId);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
     }
 
     public class CreateTournamentRequest

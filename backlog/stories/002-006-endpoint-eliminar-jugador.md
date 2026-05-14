@@ -4,8 +4,8 @@
 
 **Prioridad:** Alta  
 
-**Estado:** DRAFT  
+**Estado:** DONE  
 
 **Tasks:**  
-- Extender TournamentsController con método DELETE para players.  
-- Llamar a TournamentService para eliminar jugador.
+- [x] Extender TournamentsController con método DELETE para players.  
+- [x] Llamar a TournamentService para eliminar jugador.

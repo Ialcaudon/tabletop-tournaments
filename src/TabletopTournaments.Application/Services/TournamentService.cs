@@ -69,4 +69,22 @@ public class TournamentService : ITournamentService
         await _tournamentRepository.DeleteAsync(tournament);
         return true;
     }
+
+    public async Task<bool> RemovePlayerFromTournamentAsync(int tournamentId, int playerId)
+    {
+        var tournament = await _tournamentRepository.GetByIdAsync(tournamentId);
+        if (tournament == null)
+            return false;
+
+        var player = await _playerRepository.GetByIdAsync(playerId);
+        if (player == null)
+            return false;
+
+        if (!tournament.Players.Contains(player))
+            return false;
+
+        tournament.RemovePlayer(player);
+        await _tournamentRepository.UpdateAsync(tournament);
+        return true;
+    }
 }
