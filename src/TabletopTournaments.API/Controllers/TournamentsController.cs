@@ -69,6 +69,16 @@ namespace TabletopTournaments.API.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _tournamentService.DeleteTournamentAsync(id);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
     }
 
     public class CreateTournamentRequest

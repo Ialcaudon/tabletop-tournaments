@@ -36,6 +36,12 @@ namespace TabletopTournaments.Infrastructure.Repositories
             _dbContext.Tournaments.Update(tournament);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteAsync(Tournament tournament)
+        {
+            _dbContext.Tournaments.Remove(tournament);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 
 }

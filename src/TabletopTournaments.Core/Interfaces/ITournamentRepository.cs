@@ -8,5 +8,6 @@ namespace TabletopTournaments.Core.Interfaces
         Task<Tournament?> GetByIdAsync(int id);
         Task<IEnumerable<Tournament>> GetAllAsync();
         Task UpdateAsync(Tournament tournament);
+        Task DeleteAsync(Tournament tournament);
     }
 }

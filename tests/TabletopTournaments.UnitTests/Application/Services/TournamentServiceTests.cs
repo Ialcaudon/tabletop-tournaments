@@ -125,5 +125,28 @@ namespace TabletopTournaments.UnitTests.Application.Services
             result.Should().BeFalse();
             _tournamentRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Tournament>()), Times.Never);
         }
+
+        [Fact]
+        public async Task DeleteTournamentAsync_ShouldReturnTrue_WhenTournamentExists()
+        {
+            var tournament = new Tournament("To Delete", DateTime.Today.AddDays(5), GameSystem.Generic);
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
+
+            var result = await _service.DeleteTournamentAsync(1);
+
+            result.Should().BeTrue();
+            _tournamentRepositoryMock.Verify(x => x.DeleteAsync(tournament), Times.Once);
+        }
+
+        [Fact]
+        public async Task DeleteTournamentAsync_ShouldReturnFalse_WhenTournamentDoesNotExist()
+        {
+            _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(999)).ReturnsAsync((Tournament?)null);
+
+            var result = await _service.DeleteTournamentAsync(999);
+
+            result.Should().BeFalse();
+            _tournamentRepositoryMock.Verify(x => x.DeleteAsync(It.IsAny<Tournament>()), Times.Never);
+        }
     }
 }

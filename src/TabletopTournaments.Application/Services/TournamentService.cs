@@ -59,4 +59,14 @@ public class TournamentService : ITournamentService
         await _tournamentRepository.UpdateAsync(tournament);
         return true;
     }
+
+    public async Task<bool> DeleteTournamentAsync(int id)
+    {
+        var tournament = await _tournamentRepository.GetByIdAsync(id);
+        if (tournament == null)
+            return false;
+
+        await _tournamentRepository.DeleteAsync(tournament);
+        return true;
+    }
 }

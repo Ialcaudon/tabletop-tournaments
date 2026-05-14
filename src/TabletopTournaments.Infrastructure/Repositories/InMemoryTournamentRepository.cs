@@ -53,5 +53,11 @@ namespace TabletopTournaments.Infrastructure.Repositories
             _tournaments[tournament.Id] = tournament;
             return Task.CompletedTask;
         }
+
+        public Task DeleteAsync(Tournament tournament)
+        {
+            _tournaments.TryRemove(tournament.Id, out _);
+            return Task.CompletedTask;
+        }
     }
 }
