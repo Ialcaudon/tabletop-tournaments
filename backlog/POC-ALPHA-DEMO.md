@@ -11,15 +11,14 @@ Presentar una mini demo funcional a una tienda de juegos de mesa para convencer 
 
 | Completado | Pendiente | Total |
 |-----------|-----------|-------|
-| 7/15 | 8/15 | 15 stories |
+| 9/15 | 6/15 | 15 stories |
 
 ### Resumen rápido
-- ✅ CRUD básico de torneos (crear, leer, listar) — funcionando
+- ✅ CRUD completo de torneos (crear, leer, listar, modificar, eliminar) — funcionando
 - ✅ CRUD básico de jugadores (crear, leer) — funcionando
 - ✅ Añadir jugador a torneo — funcionando
-- ❌ Modificar torneo (PUT) — pendiente
-- ❌ Eliminar torneo (DELETE) — pendiente
-- ❌ Eliminar jugador de torneo (DELETE) — pendiente
+- ✅ Eliminar jugador de torneo — funcionando
+- ✅ **Backend 100% completado** (8/8 endpoints)
 - ❌ CORS — pendiente
 - ❌ Frontend React — no iniciado
 - ❌ Seed data — no iniciado
@@ -52,11 +51,11 @@ Presentar una mini demo funcional a una tienda de juegos de mesa para convencer 
 | 1 | 002-003: Endpoint crear torneo | 🔴 Crítica | ✅ DONE |
 | 2 | 002-004: Endpoint leer torneo (detalle + listado) | 🔴 Crítica | ✅ DONE |
 | 3 | 002-008: Endpoint modificar torneo | 🟡 Alta | ✅ DONE |
-| 4 | 002-007: Endpoint eliminar torneo | 🟡 Alta | ⬜ PENDIENTE |
+| 4 | 002-007: Endpoint eliminar torneo | 🟡 Alta | ✅ DONE |
 | 5 | 002-001: Endpoint crear usuario/jugador | 🔴 Crítica | ✅ DONE |
 | 6 | 002-002: Endpoint leer usuario/jugador | 🔴 Crítica | ✅ DONE |
 | 7 | 002-005: Endpoint añadir jugador a torneo | 🔴 Crítica | ✅ DONE |
-| 8 | 002-006: Endpoint eliminar jugador de torneo | 🟡 Alta | ⬜ PENDIENTE |
+| 8 | 002-006: Endpoint eliminar jugador de torneo | 🟡 Alta | ✅ DONE |
 | 9 | 007-005: Configurar CORS (mínimo) | 🟡 Alta | ⬜ PENDIENTE |
 | 10 | 004-001: Inicializar proyecto React | 🔴 Crítica | ⬜ PENDIENTE |
 
@@ -168,9 +167,10 @@ Esto permite abrir la demo desde cualquier dispositivo (tablet en la tienda) apu
 ## 🗓️ Timeline Revisado
 
 ### Semana 1 (14-20 mayo) — HOY ES DÍA 1
-- ~~Días 1-3: Completar endpoints API + relación Tournament-Player~~ → Parcialmente hecho (faltan: PUT, DELETE torneo, DELETE jugador de torneo)
-- **Día 1-2 (14-15 mayo):** Completar los 3 endpoints pendientes del backend + CORS
-- **Día 3-4 (16-17 mayo):** Inicializar frontend React + diseño base
+- ~~Días 1-3: Completar endpoints API + relación Tournament-Player~~ → ✅ COMPLETADO (día 1)
+- ~~Día 1-2 (14-15 mayo): Completar los 3 endpoints pendientes del backend~~ → ✅ COMPLETADO (día 1)
+- **Día 1-2 (14-15 mayo):** Configurar CORS + Inicializar frontend React
+- **Día 3-4 (16-17 mayo):** Diseño base frontend (lista torneos, detalle, crear)
 - **Día 5 (18 mayo):** Buffer / catch-up
 
 ### Semana 2 (21-27 mayo)
