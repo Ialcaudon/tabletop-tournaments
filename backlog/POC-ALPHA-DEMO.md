@@ -11,7 +11,7 @@ Presentar una mini demo funcional a una tienda de juegos de mesa para convencer 
 
 | Completado | Pendiente | Total |
 |-----------|-----------|-------|
-| 10/15 | 5/15 | 15 stories |
+| 13/15 | 2/15 | 15 stories |
 
 ### Resumen rápido
 - ✅ CRUD completo de torneos (crear, leer, listar, modificar, eliminar) — funcionando
@@ -19,8 +19,10 @@ Presentar una mini demo funcional a una tienda de juegos de mesa para convencer 
 - ✅ Añadir/eliminar jugador de torneo — funcionando
 - ✅ CORS configurado para desarrollo (localhost:5173)
 - ✅ **Backend 100% completado** (8/8 endpoints + CORS)
-- ❌ Frontend React — no iniciado
+- ✅ **Frontend Blazor Web App** — proyecto inicializado + páginas principales creadas
+- ✅ Integración API (HttpClient tipado) — completada
 - ❌ Seed data — no iniciado
+- ❌ Landing page — estructura creada, pendiente de pulido visual
 
 ---
 
@@ -56,15 +58,15 @@ Presentar una mini demo funcional a una tienda de juegos de mesa para convencer 
 | 7 | 002-005: Endpoint añadir jugador a torneo | 🔴 Crítica | ✅ DONE |
 | 8 | 002-006: Endpoint eliminar jugador de torneo | 🟡 Alta | ✅ DONE |
 | 9 | 007-005: Configurar CORS (mínimo) | 🟡 Alta | ✅ DONE |
-| 10 | 004-001: Inicializar proyecto React | 🔴 Crítica | ⬜ PENDIENTE |
+| 10 | 004-001: Inicializar proyecto Blazor Web App | 🔴 Crítica | ✅ DONE |
 
 ### Semana 2: Frontend Visual + Seed Data + Pulido
 
 | # | Story | Prioridad | Estado |
 |---|-------|-----------|--------|
-| 11 | 004-004: Interfaz gestión de torneos | 🔴 Crítica | ⬜ PENDIENTE |
-| 12 | 004-003: Interfaz gestión de jugadores | 🟡 Alta | ⬜ PENDIENTE |
-| 13 | 004-005: Integrar llamadas API | 🔴 Crítica | ⬜ PENDIENTE |
+| 11 | 004-004: Interfaz gestión de torneos | 🔴 Crítica | ✅ DONE |
+| 12 | 004-003: Interfaz gestión de jugadores | 🟡 Alta | 🔄 IN PROGRESS |
+| 13 | 004-005: Integrar llamadas API | 🔴 Crítica | ✅ DONE |
 | 14 | NUEVO: Seed data con datos de ejemplo | 🔴 Crítica | ⬜ PENDIENTE |
 | 15 | NUEVO: Landing/Home page atractiva | 🟡 Alta | ⬜ PENDIENTE |
 
@@ -94,8 +96,8 @@ Presentar una mini demo funcional a una tienda de juegos de mesa para convencer 
 ## 🔧 Decisiones Técnicas para la POC
 
 1. **Relación Tournament ↔ Player**: Crear tabla intermedia `TournamentPlayer` (many-to-many)
-2. **Frontend**: React + TypeScript + Vite + TailwindCSS (rápido y visual)
-3. **CORS**: Permitir `localhost:5173` (default Vite) en desarrollo
+2. **Frontend**: Blazor Web App (.NET 9, Interactive Server) — mismo stack que backend, integrado en la solución
+3. **CORS**: Configurado para desarrollo; Blazor puede también servirse desde el mismo host que la API
 4. **Seed Data**: Clase `DbInitializer` que se ejecuta en Development
 
 ---

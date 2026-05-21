@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletopTournaments.UnitTests", "tests\TabletopTournaments.UnitTests\TabletopTournaments.UnitTests.csproj", "{0202785A-699C-48A7-AC60-D9DF003DEE1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletopTournaments.IntegrationTests", "tests\TabletopTournaments.IntegrationTests\TabletopTournaments.IntegrationTests.csproj", "{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{088FBDA9-839D-486E-8080-48E79E044BF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabletopTournaments.Web", "src\TabletopTournaments.Web\TabletopTournaments.Web.csproj", "{0C398C8C-5FC7-45C4-9057-891BFEB4F9B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +49,15 @@ Global
 		{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD475F7D-134C-4CD2-BE0F-9AB2070CE5C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C398C8C-5FC7-45C4-9057-891BFEB4F9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C398C8C-5FC7-45C4-9057-891BFEB4F9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C398C8C-5FC7-45C4-9057-891BFEB4F9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C398C8C-5FC7-45C4-9057-891BFEB4F9B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0C398C8C-5FC7-45C4-9057-891BFEB4F9B3} = {088FBDA9-839D-486E-8080-48E79E044BF5}
+	EndGlobalSection
 EndGlobal
-

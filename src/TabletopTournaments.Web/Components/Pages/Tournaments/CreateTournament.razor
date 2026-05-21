@@ -1,0 +1,100 @@
+@page "/tournaments/create"
+@using TabletopTournaments.Web.Models
+@using TabletopTournaments.Web.Services
+@inject TournamentApiClient TournamentApi
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Crear Torneo</PageTitle>
+
+<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/tournaments">Torneos</a></li>
+        <li class="breadcrumb-item active">Crear Torneo</li>
+    </ol>
+</nav>
+
+<div class="card shadow-sm" style="max-width: 600px;">
+    <div class="card-header">
+        <h3 class="mb-0">🎯 Crear Nuevo Torneo</h3>
+    </div>
+    <div class="card-body">
+        <EditForm Model="_model" OnValidSubmit="HandleSubmit" FormName="createTournament">
+            <div class="mb-3">
+                <label class="form-label">Nombre del Torneo</label>
+                <InputText class="form-control" @bind-Value="_model.Name" placeholder="Ej: Gran Batalla AoS - Primavera 2026" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha</label>
+                <InputDate class="form-control" @bind-Value="_model.Date" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Sistema de Juego</label>
+                <InputSelect class="form-select" @bind-Value="_model.GameSystem">
+                    <option value="0">Genérico</option>
+                    <option value="1">Warhammer AoS</option>
+                    <option value="2">Magic: The Gathering</option>
+                    <option value="3">Catán</option>
+                </InputSelect>
+            </div>
+
+            @if (_error is not null)
+            {
+                <div class="alert alert-danger">@_error</div>
+            }
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary" disabled="@_submitting">
+                    @if (_submitting)
+                    {
+                        <span class="spinner-border spinner-border-sm me-1"></span>
+                    }
+                    Crear Torneo
+                </button>
+                <a href="/tournaments" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private CreateTournamentModel _model = new();
+    private bool _submitting;
+    private string? _error;
+
+    private async Task HandleSubmit()
+    {
+        if (string.IsNullOrWhiteSpace(_model.Name))
+        {
+            _error = "El nombre del torneo es obligatorio.";
+            return;
+        }
+
+        _submitting = true;
+        _error = null;
+
+        try
+        {
+            var success = await TournamentApi.CreateTournamentAsync(_model);
+            if (success)
+            {
+                Navigation.NavigateTo("/tournaments");
+            }
+            else
+            {
+                _error = "No se pudo crear el torneo. Inténtalo de nuevo.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _error = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            _submitting = false;
+        }
+    }
+}
+

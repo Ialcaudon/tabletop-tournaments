@@ -1,0 +1,105 @@
+@page "/tournaments"
+@using TabletopTournaments.Web.Models
+@using TabletopTournaments.Web.Services
+@inject TournamentApiClient TournamentApi
+@rendermode InteractiveServer
+
+<PageTitle>Torneos</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>🏆 Torneos</h2>
+    <a href="/tournaments/create" class="btn btn-primary">
+        <span class="bi bi-plus-circle me-1"></span> Nuevo Torneo
+    </a>
+</div>
+
+@if (_loading)
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 text-muted">Cargando torneos...</p>
+    </div>
+}
+else if (_error is not null)
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @_error
+        <button class="btn btn-sm btn-outline-danger ms-3" @onclick="LoadTournaments">Reintentar</button>
+    </div>
+}
+else if (_tournaments.Count == 0)
+{
+    <div class="text-center py-5">
+        <h4 class="text-muted">No hay torneos todavía</h4>
+        <p>¡Crea el primero!</p>
+        <a href="/tournaments/create" class="btn btn-primary">Crear Torneo</a>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var tournament in _tournaments)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">@tournament.Name</h5>
+                            <span class="badge bg-info">@GetGameSystemName(tournament.GameSystem)</span>
+                        </div>
+                        <p class="card-text text-muted">
+                            <span class="bi bi-calendar me-1"></span> @tournament.Date.ToString("dd MMM yyyy")
+                        </p>
+                        <p class="card-text">
+                            <span class="bi bi-people me-1"></span> @tournament.Players.Count jugador(es)
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="/tournaments/@tournament.Id" class="btn btn-sm btn-outline-primary">Ver detalle</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<TournamentDto> _tournaments = new();
+    private bool _loading = true;
+    private string? _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTournaments();
+    }
+
+    private async Task LoadTournaments()
+    {
+        _loading = true;
+        _error = null;
+        try
+        {
+            _tournaments = await TournamentApi.GetAllTournamentsAsync();
+        }
+        catch (Exception ex)
+        {
+            _error = $"No se pudieron cargar los torneos: {ex.Message}";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static string GetGameSystemName(int gameSystem) => gameSystem switch
+    {
+        0 => "Genérico",
+        1 => "Warhammer AoS",
+        2 => "Magic: The Gathering",
+        3 => "Catán",
+        _ => "Otro"
+    };
+}
+

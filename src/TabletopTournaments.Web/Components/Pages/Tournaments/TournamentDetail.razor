@@ -1,0 +1,171 @@
+@page "/tournaments/{Id:int}"
+@using TabletopTournaments.Web.Models
+@using TabletopTournaments.Web.Services
+@inject TournamentApiClient TournamentApi
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Detalle del Torneo</PageTitle>
+
+@if (_loading)
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Cargando torneo...</p>
+    </div>
+}
+else if (_tournament is null)
+{
+    <div class="alert alert-warning">
+        <h4>Torneo no encontrado</h4>
+        <a href="/tournaments" class="btn btn-outline-primary mt-2">Volver a torneos</a>
+    </div>
+}
+else
+{
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/tournaments">Torneos</a></li>
+            <li class="breadcrumb-item active">@_tournament.Name</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">@_tournament.Name</h3>
+            <span class="badge bg-info fs-6">@GetGameSystemName(_tournament.GameSystem)</span>
+        </div>
+        <div class="card-body">
+            <p><strong>📅 Fecha:</strong> @_tournament.Date.ToString("dddd, dd MMMM yyyy")</p>
+            <p><strong>👥 Jugadores inscritos:</strong> @_tournament.Players.Count</p>
+
+            <hr />
+
+            <h5>Jugadores</h5>
+            @if (_tournament.Players.Count == 0)
+            {
+                <p class="text-muted">Aún no hay jugadores inscritos.</p>
+            }
+            else
+            {
+                <ul class="list-group">
+                    @foreach (var player in _tournament.Players)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @player.Name
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => RemovePlayer(player.Id)">
+                                Quitar
+                            </button>
+                        </li>
+                    }
+                </ul>
+            }
+
+            <hr />
+
+            <h5>Inscribir Jugador</h5>
+            <div class="input-group mb-3" style="max-width: 300px;">
+                <input type="number" class="form-control" placeholder="ID del jugador" @bind="_playerIdToAdd" />
+                <button class="btn btn-outline-success" @onclick="AddPlayer">Inscribir</button>
+            </div>
+            @if (_actionMessage is not null)
+            {
+                <div class="alert @(_actionSuccess ? "alert-success" : "alert-danger") mt-2">@_actionMessage</div>
+            }
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-danger" @onclick="DeleteTournament">Eliminar Torneo</button>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private TournamentDto? _tournament;
+    private bool _loading = true;
+    private int _playerIdToAdd;
+    private string? _actionMessage;
+    private bool _actionSuccess;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTournament();
+    }
+
+    private async Task LoadTournament()
+    {
+        _loading = true;
+        try
+        {
+            _tournament = await TournamentApi.GetTournamentByIdAsync(Id);
+        }
+        catch
+        {
+            _tournament = null;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private async Task AddPlayer()
+    {
+        if (_playerIdToAdd <= 0) return;
+
+        var success = await TournamentApi.AddPlayerToTournamentAsync(Id, _playerIdToAdd);
+        if (success)
+        {
+            _actionMessage = "Jugador inscrito correctamente.";
+            _actionSuccess = true;
+            _playerIdToAdd = 0;
+            await LoadTournament();
+        }
+        else
+        {
+            _actionMessage = "No se pudo inscribir al jugador. Verifica que existe y no está ya inscrito.";
+            _actionSuccess = false;
+        }
+    }
+
+    private async Task RemovePlayer(int playerId)
+    {
+        var success = await TournamentApi.RemovePlayerFromTournamentAsync(Id, playerId);
+        if (success)
+        {
+            _actionMessage = "Jugador eliminado del torneo.";
+            _actionSuccess = true;
+            await LoadTournament();
+        }
+        else
+        {
+            _actionMessage = "No se pudo eliminar al jugador.";
+            _actionSuccess = false;
+        }
+    }
+
+    private async Task DeleteTournament()
+    {
+        var success = await TournamentApi.DeleteTournamentAsync(Id);
+        if (success)
+        {
+            Navigation.NavigateTo("/tournaments");
+        }
+        else
+        {
+            _actionMessage = "No se pudo eliminar el torneo.";
+            _actionSuccess = false;
+        }
+    }
+
+    private static string GetGameSystemName(int gameSystem) => gameSystem switch
+    {
+        0 => "Genérico",
+        1 => "Warhammer AoS",
+        2 => "Magic: The Gathering",
+        3 => "Catán",
+        _ => "Otro"
+    };
+}
+

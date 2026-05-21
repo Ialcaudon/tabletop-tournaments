@@ -1,11 +1,12 @@
-# Story 004-003: Crear interfaz para gestión de usuarios
+# Story 004-003: Crear interfaz para gestión de jugadores
 
-**Descripción:** Crear interfaz para gestión de usuarios (formularios para crear/ver).  
+**Descripción:** Crear interfaz Blazor para gestión de jugadores (inscripción en torneos, visualización).
 
-**Prioridad:** Media  
+**Prioridad:** Alta
 
-**Estado:** DRAFT  
+**Estado:** IN PROGRESS
 
-**Tasks:**  
-- Desarrollar componentes React para usuarios.  
-- Conectar con endpoints de players.
+**Tasks:**
+- [x] Inscribir jugador a torneo desde detalle de torneo.
+- [x] Eliminar jugador de torneo desde detalle de torneo.
+- [ ] Crear página dedicada de jugadores (listado, registro).

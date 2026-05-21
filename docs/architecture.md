@@ -8,6 +8,7 @@ This project follows a simplified Domain-Driven Design (DDD) architecture for a 
 - **Application**: Houses application services that orchestrate domain logic and handle use cases. Services inject repositories to perform operations.
 - **Infrastructure**: Implements repository interfaces using EF Core (currently transitioning from in-memory to SQL Server). Includes DbContext and entity configurations.
 - **API**: ASP.NET Core controllers that inject services and handle HTTP requests/responses.
+- **Web (Blazor)**: Blazor Web App (.NET 9, Interactive Server) that consumes the API via typed HttpClient services. Contains Razor components for UI (Pages, Layout) and service clients (TournamentApiClient, PlayerApiClient).
 - **UnitTests**: xUnit tests with Moq and FluentAssertions for unit testing services and domain logic.
 - **IntegrationTests**: Implemented for end-to-end testing of infrastructure and API interactions.
 

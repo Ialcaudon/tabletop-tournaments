@@ -1,11 +1,12 @@
 # Story 004-004: Crear interfaz para gestión de torneos
 
-**Descripción:** Crear interfaz para gestión de torneos (listas, formularios).  
+**Descripción:** Crear interfaz Blazor para gestión de torneos (lista, detalle, crear).
 
-**Prioridad:** Media  
+**Prioridad:** Crítica
 
-**Estado:** DRAFT  
+**Estado:** DONE
 
-**Tasks:**  
-- Desarrollar componentes React para torneos.  
-- Conectar con endpoints de tournaments.
+**Tasks:**
+- [x] Crear página de lista de torneos (TournamentList.razor).
+- [x] Crear página de detalle de torneo con gestión de jugadores (TournamentDetail.razor).
+- [x] Crear página de creación de torneo con formulario (CreateTournament.razor).

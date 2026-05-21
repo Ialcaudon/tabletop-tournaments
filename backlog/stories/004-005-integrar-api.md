@@ -1,11 +1,13 @@
 # Story 004-005: Integrar llamadas a API backend
 
-**Descripción:** Integrar llamadas a API backend usando Axios o Fetch.  
+**Descripción:** Integrar llamadas a API backend usando HttpClient tipado en Blazor.
 
-**Prioridad:** Media  
+**Prioridad:** Crítica
 
-**Estado:** DRAFT  
+**Estado:** DONE
 
-**Tasks:**  
-- Configurar cliente HTTP en React.  
-- Manejar respuestas y errores.
+**Tasks:**
+- [x] Crear TournamentApiClient con HttpClient tipado.
+- [x] Crear PlayerApiClient con HttpClient tipado.
+- [x] Configurar base URL desde appsettings.
+- [x] Manejar respuestas y errores en componentes.
