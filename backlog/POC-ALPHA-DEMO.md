@@ -7,19 +7,18 @@ Presentar una mini demo funcional a una tienda de juegos de mesa para convencer 
 
 ---
 
-## 📊 Progreso Actual (actualizado: 14 mayo 2026)
+## 📊 Progreso Actual (actualizado: 21 mayo 2026)
 
 | Completado | Pendiente | Total |
 |-----------|-----------|-------|
-| 9/15 | 6/15 | 15 stories |
+| 10/15 | 5/15 | 15 stories |
 
 ### Resumen rápido
 - ✅ CRUD completo de torneos (crear, leer, listar, modificar, eliminar) — funcionando
 - ✅ CRUD básico de jugadores (crear, leer) — funcionando
-- ✅ Añadir jugador a torneo — funcionando
-- ✅ Eliminar jugador de torneo — funcionando
-- ✅ **Backend 100% completado** (8/8 endpoints)
-- ❌ CORS — pendiente
+- ✅ Añadir/eliminar jugador de torneo — funcionando
+- ✅ CORS configurado para desarrollo (localhost:5173)
+- ✅ **Backend 100% completado** (8/8 endpoints + CORS)
 - ❌ Frontend React — no iniciado
 - ❌ Seed data — no iniciado
 
@@ -56,7 +55,7 @@ Presentar una mini demo funcional a una tienda de juegos de mesa para convencer 
 | 6 | 002-002: Endpoint leer usuario/jugador | 🔴 Crítica | ✅ DONE |
 | 7 | 002-005: Endpoint añadir jugador a torneo | 🔴 Crítica | ✅ DONE |
 | 8 | 002-006: Endpoint eliminar jugador de torneo | 🟡 Alta | ✅ DONE |
-| 9 | 007-005: Configurar CORS (mínimo) | 🟡 Alta | ⬜ PENDIENTE |
+| 9 | 007-005: Configurar CORS (mínimo) | 🟡 Alta | ✅ DONE |
 | 10 | 004-001: Inicializar proyecto React | 🔴 Crítica | ⬜ PENDIENTE |
 
 ### Semana 2: Frontend Visual + Seed Data + Pulido

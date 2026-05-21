@@ -22,6 +22,18 @@ public class Startup
         services.AddSwaggerGen();
         services.AddControllers();
 
+        // CORS
+        var allowedOrigins = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowFrontend", policy =>
+            {
+                policy.WithOrigins(allowedOrigins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
         // DbContext
         services.AddDbContext<TabletopTournamentsDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -44,6 +56,7 @@ public class Startup
             app.UseSwaggerUI();
         }
 
+        app.UseCors("AllowFrontend");
         app.MapControllers();
     }
 }
