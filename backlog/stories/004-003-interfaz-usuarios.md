@@ -4,9 +4,9 @@
 
 **Prioridad:** Alta
 
-**Estado:** IN PROGRESS
+**Estado:** DONE
 
 **Tasks:**
 - [x] Inscribir jugador a torneo desde detalle de torneo.
 - [x] Eliminar jugador de torneo desde detalle de torneo.
-- [ ] Crear página dedicada de jugadores (listado, registro).
+- [x] Crear página dedicada de jugadores (listado, registro).

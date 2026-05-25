@@ -26,6 +26,13 @@ namespace TabletopTournaments.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id }, id);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var players = await _playerService.GetAllPlayersAsync();
+            return Ok(players.Select(p => new { p.Id, p.Name }));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

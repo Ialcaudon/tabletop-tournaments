@@ -7,4 +7,5 @@ public interface IPlayerService
 {
     Task<int> RegisterPlayerAsync(string name);
     Task<Player?> GetPlayerByIdAsync(int id);
+    Task<IEnumerable<Player>> GetAllPlayersAsync();
 }

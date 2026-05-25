@@ -12,6 +12,11 @@ public class PlayerApiClient
         _httpClient = httpClient;
     }
 
+    public async Task<List<PlayerDto>> GetAllPlayersAsync()
+    {
+        return await _httpClient.GetFromJsonAsync<List<PlayerDto>>("api/players") ?? new();
+    }
+
     public async Task<PlayerDto?> GetPlayerByIdAsync(int id)
     {
         return await _httpClient.GetFromJsonAsync<PlayerDto>($"api/players/{id}");

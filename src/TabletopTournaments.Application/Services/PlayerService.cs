@@ -24,4 +24,9 @@ public class PlayerService : IPlayerService
     {
         return await _playerRepository.GetByIdAsync(id);
     }
+
+    public async Task<IEnumerable<Player>> GetAllPlayersAsync()
+    {
+        return await _playerRepository.GetAllAsync();
+    }
 }

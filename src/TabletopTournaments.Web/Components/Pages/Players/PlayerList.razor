@@ -1,0 +1,148 @@
+@page "/players"
+@using TabletopTournaments.Web.Models
+@using TabletopTournaments.Web.Services
+@inject PlayerApiClient PlayerApi
+@rendermode InteractiveServer
+
+<PageTitle>Jugadores</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>👤 Jugadores</h2>
+    <button class="btn btn-primary" @onclick="ToggleRegisterForm">
+        <span class="bi bi-person-plus-fill me-1"></span> Registrar Jugador
+    </button>
+</div>
+
+@if (_showRegisterForm)
+{
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Nuevo Jugador</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" placeholder="Nombre del jugador" @bind="_newPlayerName" @bind:event="oninput" />
+                </div>
+                <div class="col-md-auto">
+                    <button class="btn btn-success" @onclick="RegisterPlayer" disabled="@(string.IsNullOrWhiteSpace(_newPlayerName))">
+                        Registrar
+                    </button>
+                    <button class="btn btn-outline-secondary ms-2" @onclick="ToggleRegisterForm">Cancelar</button>
+                </div>
+            </div>
+            @if (_registerMessage is not null)
+            {
+                <div class="alert @(_registerSuccess ? "alert-success" : "alert-danger") mt-3">@_registerMessage</div>
+            }
+        </div>
+    </div>
+}
+
+@if (_loading)
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-2 text-muted">Cargando jugadores...</p>
+    </div>
+}
+else if (_error is not null)
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @_error
+        <button class="btn btn-sm btn-outline-danger ms-3" @onclick="LoadPlayers">Reintentar</button>
+    </div>
+}
+else if (_players.Count == 0)
+{
+    <div class="text-center py-5">
+        <h4 class="text-muted">No hay jugadores registrados todavía</h4>
+        <p>¡Registra el primero!</p>
+        <button class="btn btn-primary" @onclick="ToggleRegisterForm">Registrar Jugador</button>
+    </div>
+}
+else
+{
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Total: <strong>@_players.Count</strong> jugador(es)</span>
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach (var player in _players)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="fw-semibold">@player.Name</span>
+                        <span class="text-muted ms-2 small">#@player.Id</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    private List<PlayerDto> _players = new();
+    private bool _loading = true;
+    private string? _error;
+
+    private bool _showRegisterForm;
+    private string _newPlayerName = string.Empty;
+    private string? _registerMessage;
+    private bool _registerSuccess;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPlayers();
+    }
+
+    private async Task LoadPlayers()
+    {
+        _loading = true;
+        _error = null;
+        try
+        {
+            _players = await PlayerApi.GetAllPlayersAsync();
+        }
+        catch (Exception ex)
+        {
+            _error = $"No se pudieron cargar los jugadores: {ex.Message}";
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void ToggleRegisterForm()
+    {
+        _showRegisterForm = !_showRegisterForm;
+        _registerMessage = null;
+        _newPlayerName = string.Empty;
+    }
+
+    private async Task RegisterPlayer()
+    {
+        if (string.IsNullOrWhiteSpace(_newPlayerName)) return;
+
+        var model = new RegisterPlayerModel { Name = _newPlayerName.Trim() };
+        var success = await PlayerApi.RegisterPlayerAsync(model);
+
+        if (success)
+        {
+            _registerMessage = $"Jugador '{_newPlayerName.Trim()}' registrado correctamente.";
+            _registerSuccess = true;
+            _newPlayerName = string.Empty;
+            await LoadPlayers();
+        }
+        else
+        {
+            _registerMessage = "No se pudo registrar el jugador. Inténtalo de nuevo.";
+            _registerSuccess = false;
+        }
+    }
+}
+
