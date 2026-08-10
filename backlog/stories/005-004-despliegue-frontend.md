@@ -6,6 +6,7 @@
 
 **Estado:** DRAFT  
 
-**Tasks:**  
-- Elegir servicio para hosting.  
-- Configurar build y deploy.
+**Tasks:**
+- [ ] Resolver en la historia 005-001 si se mantiene Blazor Interactive Server o
+  se adopta un frontend estático compatible con Vercel.
+- [ ] Configurar el build y el despliegue para la alternativa seleccionada.

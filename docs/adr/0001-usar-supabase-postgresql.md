@@ -10,9 +10,12 @@ La aplicación persiste actualmente torneos y jugadores en SQL Server mediante
 Entity Framework Core. El desarrollo local, las pruebas de integración, la
 configuración y la migración existente de EF Core están vinculados a SQL Server.
 
-La producción se desplegará en Render y utilizará Supabase. Supabase proporciona
-una base de datos PostgreSQL gestionada y no admite SQL Server, por lo que el
-proveedor y la migración actuales no se pueden utilizar en el entorno objetivo.
+La producción utilizará Supabase como plataforma de base de datos. Supabase
+proporciona PostgreSQL gestionado y no admite SQL Server, por lo que el proveedor
+y la migración actuales no se pueden utilizar en el entorno objetivo. La elección
+del proveedor que alojará la aplicación es una decisión independiente y se
+realiza en la historia
+[005-001](../../backlog/stories/005-001-elegir-cloud.md).
 
 La aplicación ya dispone de una API de backend entre Blazor y la base de datos.
 Actualmente no es necesario que Blazor acceda directamente a la API de datos de
@@ -61,8 +64,8 @@ Supabase.
 - Las migraciones de esquema y las operaciones administrativas utilizarán una
   conexión directa a PostgreSQL cuando el entorno de ejecución lo permita.
 - Un despliegue persistente de la API podrá usar la conexión directa cuando haya
-  IPv6. En un host que sólo disponga de IPv4, como podría ser el entorno de
-  Render, utilizará el pooler de Supavisor en modo sesión.
+  IPv6. En un host que sólo disponga de IPv4 utilizará el pooler de Supavisor en
+  modo sesión.
 - El modo transacción del pooler no será la opción predeterminada para la API
   persistente: tiene una semántica distinta para las sentencias preparadas y está
   orientado principalmente a cargas efímeras o serverless.
@@ -108,8 +111,8 @@ Supabase.
   migraciones de esquema no incorporarán acceso a la base antigua.
 - Decidir si la fecha de un torneo es un día de calendario (`date` / `DateOnly`)
   o un instante (`timestamptz` / UTC) antes de crear el esquema inicial.
-- Confirmar las capacidades de red del servicio de Render antes de seleccionar
-  el endpoint de conexión de producción.
+- Confirmar las capacidades de red del proveedor que aloje la API antes de
+  seleccionar el endpoint de conexión de producción.
 
 ## Referencias
 

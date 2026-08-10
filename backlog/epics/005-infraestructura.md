@@ -5,10 +5,10 @@
 
 **Prioridad:** Baja (último paso, una vez funcional).  
 
-**Estado:** DRAFT  
+**Estado:** IN_PROGRESS
 
 **Stories:**  
-- [005-001] Elegir proveedor de cloud  
+- [005-001] Elegir proveedores de alojamiento
 - [005-002] Configurar pipeline CI/CD  
 - [005-003] Planificar despliegue de API y DB  
 - [005-004] Planificar despliegue de frontend

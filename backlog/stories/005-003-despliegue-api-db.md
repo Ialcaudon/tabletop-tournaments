@@ -13,12 +13,12 @@
   - ASPNETCORE_ENVIRONMENT=Production
   - ConnectionStrings__DefaultConnection
 - [ ] Obtener de Supabase la cadena de conexión PostgreSQL para producción y
-  almacenarla como secreto de Render.
+  almacenarla como secreto del proveedor que aloje la API.
 - [ ] Usar conexión directa para migraciones y elegir conexión directa o el
-  pooler de sesión para la API según la conectividad IPv6 de Render.
+  pooler de sesión para la API según la conectividad IPv6 del proveedor elegido.
 - [ ] Aplicar las migraciones como un paso explícito del despliegue; la API no
   migrará la base de datos durante el arranque.
-- Ya esta configurado Render como proveedor cloud
+- [ ] Incorporar el proveedor seleccionado en la historia 005-001.
 - Renombrado repositories en el proyecto de backend. Ya no es un InmemoryRepository, debemos utilizar el que levantamos con docker
 
 La estrategia de base de datos está definida en
