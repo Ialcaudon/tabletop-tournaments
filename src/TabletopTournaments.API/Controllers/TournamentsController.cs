@@ -94,14 +94,14 @@ namespace TabletopTournaments.API.Controllers
     public class CreateTournamentRequest
     {
         public string Name { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public GameSystem GameSystem { get; set; }
     }
 
     public class UpdateTournamentRequest
     {
         public string Name { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         public GameSystem GameSystem { get; set; }
     }
 

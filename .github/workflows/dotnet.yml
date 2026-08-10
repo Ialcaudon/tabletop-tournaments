@@ -46,24 +46,6 @@ jobs:
     name: Integration Tests
     runs-on: ubuntu-latest
     needs: build
-    env:
-      SA_PASSWORD: "Your_strong_Password_123!"
-
-    services:
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        ports:
-          - 1433:1433
-        env:
-          ACCEPT_EULA: Y
-          MSSQL_PID: Developer
-          MSSQL_SA_PASSWORD: ${{ env.SA_PASSWORD }}
-        options: >-
-          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 30
-          --health-start-period 20s
 
     steps:
       - uses: actions/checkout@v4
@@ -73,16 +55,5 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
-      - name: Wait for SQL Server readiness
-        run: |
-          for i in {1..30}; do
-            docker exec ${{ job.services.sqlserver.id }} /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -C -Q "SELECT 1" && exit 0
-            sleep 2
-          done
-          echo "SQL Server not ready in time" >&2
-          exit 1
-
       - name: Run integration tests
-        env:
-          SA_PASSWORD: ${{ env.SA_PASSWORD }}
         run: dotnet test tests/TabletopTournaments.IntegrationTests/TabletopTournaments.IntegrationTests.csproj --configuration Release

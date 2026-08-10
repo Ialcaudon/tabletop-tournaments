@@ -2,6 +2,17 @@
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+if [[ -f "$ROOT_DIR/.env" ]]; then
+  set -a
+  source "$ROOT_DIR/.env"
+  set +a
+fi
+
+if [[ -z "${ConnectionStrings__DefaultConnection:-}" ]]; then
+  echo "❌ Falta ConnectionStrings__DefaultConnection. Copia .env.example como .env y configura PostgreSQL."
+  exit 1
+fi
+
 API_PROJECT="$ROOT_DIR/src/TabletopTournaments.API/TabletopTournaments.API.csproj"
 WEB_PROJECT="$ROOT_DIR/src/TabletopTournaments.Web/TabletopTournaments.Web.csproj"
 
@@ -27,4 +38,3 @@ echo "  Web  → http://localhost:5067"
 echo ""
 
 wait "$API_PID" "$WEB_PID"
-

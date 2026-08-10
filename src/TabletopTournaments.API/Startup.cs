@@ -35,8 +35,12 @@ public class Startup
         });
 
         // DbContext
+        var connectionString = Configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException(
+                "ConnectionStrings:DefaultConnection must be configured for PostgreSQL.");
+
         services.AddDbContext<TabletopTournamentsDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(connectionString));
 
         // Repositories
         services.AddScoped<ITournamentRepository, TournamentRepository>();

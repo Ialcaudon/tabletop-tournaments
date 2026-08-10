@@ -17,7 +17,7 @@ public class TournamentService : ITournamentService
         _playerRepository = playerRepository;
     }
 
-    public async Task<int> CreateTournamentAsync(string name, DateTime date, GameSystem gameSystem)
+    public async Task<int> CreateTournamentAsync(string name, DateOnly date, GameSystem gameSystem)
     {
         var tournament = new Tournament(name, date, gameSystem);
         await _tournamentRepository.AddAsync(tournament);
@@ -49,7 +49,7 @@ public class TournamentService : ITournamentService
         return true;
     }
 
-    public async Task<bool> UpdateTournamentAsync(int id, string name, DateTime date, GameSystem gameSystem)
+    public async Task<bool> UpdateTournamentAsync(int id, string name, DateOnly date, GameSystem gameSystem)
     {
         var tournament = await _tournamentRepository.GetByIdAsync(id);
         if (tournament == null)

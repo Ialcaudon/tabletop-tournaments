@@ -49,6 +49,8 @@ Supabase.
 
 - Las tablas de la aplicación estarán en un esquema privado `tabletop` en lugar
   del esquema expuesto `public`.
+- La fecha de un torneo representa un día de calendario y se modelará como
+  `DateOnly` en .NET y `date` en PostgreSQL.
 - La API de datos de Supabase deberá permanecer deshabilitada mientras la
   aplicación no la utilice.
 - Las credenciales de base de datos y los secretos del proyecto se proporcionarán
@@ -109,8 +111,6 @@ Supabase.
 - Confirmar si existe una base SQL Server con datos que deban transferirse. En
   ese caso se creará un proceso separado y repetible para migrar los datos; las
   migraciones de esquema no incorporarán acceso a la base antigua.
-- Decidir si la fecha de un torneo es un día de calendario (`date` / `DateOnly`)
-  o un instante (`timestamptz` / UTC) antes de crear el esquema inicial.
 - Confirmar las capacidades de red del proveedor que aloje la API antes de
   seleccionar el endpoint de conexión de producción.
 

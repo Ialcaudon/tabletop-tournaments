@@ -8,8 +8,15 @@ namespace TabletopTournaments.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Player> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.ToTable("players", "tabletop");
+
+            builder.HasKey(x => x.Id)
+                .HasName("pk_players");
+            builder.Property(x => x.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
             builder.Property(x => x.Name)
+                .HasColumnName("name")
                 .HasMaxLength(200)
                 .IsRequired();
         }

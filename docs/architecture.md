@@ -4,10 +4,9 @@
 
 - [ADR 0001: Usar Supabase PostgreSQL como plataforma de base de datos](adr/0001-usar-supabase-postgresql.md)
 
-La implementación actual todavía utiliza SQL Server. El ADR 0001 define la
-arquitectura objetivo y el plan de transición a Supabase PostgreSQL. Este trabajo
-se realiza por etapas para no presentar decisiones previstas como si ya
-estuvieran desplegadas.
+La persistencia utiliza PostgreSQL mediante Npgsql. El ADR 0001 define la
+estrategia para desarrollar en local y desplegar la base de datos administrada
+por Supabase.
 
 ## Visión general
 
@@ -27,8 +26,7 @@ Blazor Web ──HTTP──> API ──> Application ──> Core
 - **Application:** implementa los casos de uso mediante servicios de aplicación
   que dependen de las interfaces definidas en Core.
 - **Infrastructure:** implementa los repositorios y el `DbContext` mediante
-  Entity Framework Core. Actualmente usa SQL Server y migrará a Npgsql y
-  PostgreSQL.
+  Entity Framework Core y Npgsql.
 - **API:** expone controladores ASP.NET Core y actúa como raíz de composición para
   registrar servicios, repositorios y persistencia.
 - **Web:** es una aplicación Blazor con componentes interactivos de servidor.
@@ -40,12 +38,9 @@ Blazor Web ──HTTP──> API ──> Application ──> Core
 - **UnitTests:** prueba entidades y servicios con xUnit, Moq y
   FluentAssertions. Los repositorios se sustituyen por mocks.
 - **IntegrationTests:** prueba directamente los repositorios de infraestructura
-  contra SQL Server mediante Testcontainers. Todavía no realiza pruebas HTTP de
-  extremo a extremo.
-
-Como parte de la transición a Supabase, las pruebas de integración pasarán a
-PostgreSQL y aplicarán las migraciones SQL versionadas en lugar de utilizar
-`EnsureCreated`.
+  contra PostgreSQL mediante Testcontainers. Cada fixture parte de una base
+  vacía y aplica en orden las migraciones de `supabase/migrations`; no utiliza
+  `EnsureCreated`. Todavía no realiza pruebas HTTP de extremo a extremo.
 
 ## Patrones principales
 
@@ -61,17 +56,31 @@ PostgreSQL y aplicarán las migraciones SQL versionadas en lugar de utilizar
 
 ## Estado de la persistencia
 
-La configuración vigente registra `TabletopTournamentsDbContext` con SQL Server.
-Los repositorios EF están activos; las implementaciones InMemory permanecen en el
+La configuración registra `TabletopTournamentsDbContext` con Npgsql. Los
+repositorios EF están activos; las implementaciones InMemory permanecen en el
 repositorio, pero no están registradas en la aplicación.
 
-La arquitectura objetivo conservará EF Core como ORM y cambiará el proveedor a
-Npgsql. El esquema se versionará en `supabase/migrations` y la API será el único
-componente con acceso directo a PostgreSQL.
+El esquema privado `tabletop` y sus nombres `snake_case` se mapean explícitamente
+en Infrastructure. `supabase/migrations` es la única fuente de verdad del
+esquema y la API es el único componente con acceso directo a PostgreSQL. La fecha
+de un torneo es un día de calendario (`DateOnly` / `date`).
 
-## Ejecución actual
+## Desarrollo local
 
-Desde la raíz del repositorio se pueden iniciar API y Blazor con:
+La CLI de Supabase inicia PostgreSQL y aplica las migraciones versionadas:
+
+```bash
+supabase start
+supabase db reset
+```
+
+La API obtiene la conexión exclusivamente de
+`ConnectionStrings__DefaultConnection`. `start-dev.sh` carga esta variable desde
+el archivo local `.env`, que no se versiona. `.env.example` documenta el formato
+sin incluir credenciales reales.
+
+Después de preparar PostgreSQL y `.env`, se pueden iniciar API y Blazor desde la
+raíz del repositorio con:
 
 ```bash
 ./start-dev.sh
@@ -82,8 +91,9 @@ Los endpoints locales actuales son:
 - API y Swagger: `http://localhost:5102/swagger`
 - Blazor: `http://localhost:5067`
 
-La base de datos y las instrucciones de ejecución cambiarán en los siguientes
-bloques de la migración a PostgreSQL.
+En Supabase alojado, las migraciones y las tareas administrativas usan la
+conexión directa. La API persistente usa también la conexión directa si dispone
+de IPv6 y Supavisor en modo sesión cuando el host sólo tiene IPv4.
 
 ## Pruebas actuales
 

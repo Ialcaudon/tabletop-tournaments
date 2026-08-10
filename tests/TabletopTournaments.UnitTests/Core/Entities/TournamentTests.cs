@@ -13,7 +13,7 @@ namespace TabletopTournaments.UnitTests.Core.Entities
         {
             // Arrange
             string name = "Warhammer Championship";
-            DateTime date = DateTime.Today.AddDays(10);
+            DateOnly date = DateOnly.FromDateTime(DateTime.Today).AddDays(10);
             GameSystem gameSystem = GameSystem.WarhammerAoS;
 
             // Act
@@ -32,7 +32,7 @@ namespace TabletopTournaments.UnitTests.Core.Entities
         public void Constructor_ShouldThrowArgumentException_WhenNameIsInvalid(string invalidName)
         {
             // Arrange
-            DateTime date = DateTime.Today.AddDays(10);
+            DateOnly date = DateOnly.FromDateTime(DateTime.Today).AddDays(10);
             GameSystem gameSystem = GameSystem.Generic;
 
             // Act

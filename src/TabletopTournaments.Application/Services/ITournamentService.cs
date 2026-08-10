@@ -8,11 +8,11 @@ namespace TabletopTournaments.Application.Services;
 
 public interface ITournamentService
 {
-    Task<int> CreateTournamentAsync(string name, DateTime date, GameSystem gameSystem);
+    Task<int> CreateTournamentAsync(string name, DateOnly date, GameSystem gameSystem);
     Task<Tournament?> GetTournamentByIdAsync(int id);
     Task<IEnumerable<Tournament>> GetAllTournamentsAsync();
     Task<bool> AddPlayerToTournamentAsync(int tournamentId, int playerId);
-    Task<bool> UpdateTournamentAsync(int id, string name, DateTime date, GameSystem gameSystem);
+    Task<bool> UpdateTournamentAsync(int id, string name, DateOnly date, GameSystem gameSystem);
     Task<bool> DeleteTournamentAsync(int id);
     Task<bool> RemovePlayerFromTournamentAsync(int tournamentId, int playerId);
 }

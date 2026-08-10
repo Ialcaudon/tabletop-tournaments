@@ -1,96 +1,103 @@
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Testcontainers.MsSql;
+using Npgsql;
 using TabletopTournaments.Infrastructure.DbContexts;
+using Testcontainers.PostgreSql;
 using Xunit;
 
 namespace TabletopTournaments.IntegrationTests;
 
 public class IntegrationTestFixture : IAsyncLifetime
 {
-    private readonly MsSqlContainer _sqlContainer;
-    private string _connectionString = null!;
+    private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
+        .WithImage("postgres:15")
+        .WithDatabase("tabletop_tournaments_test")
+        .WithUsername("postgres")
+        .WithPassword("postgres")
+        .Build();
 
-    public IntegrationTestFixture()
-    {
-        var password = GetSaPassword();
-        _sqlContainer = new MsSqlBuilder()
-            .WithPassword(password)
-            .Build();
-    }
+    private string _connectionString = null!;
 
     public async Task InitializeAsync()
     {
-        await _sqlContainer.StartAsync();
-
-        var sqlConnectionBuilder = new SqlConnectionStringBuilder(_sqlContainer.GetConnectionString())
-        {
-            InitialCatalog = "TabletopTournamentsTest",
-            TrustServerCertificate = true
-        };
-
-        _connectionString = sqlConnectionBuilder.ConnectionString;
-
-        await using var dbContext = CreateDbContext();
-        await dbContext.Database.EnsureCreatedAsync();
+        await _postgresContainer.StartAsync();
+        _connectionString = _postgresContainer.GetConnectionString();
+        await ApplyMigrationsAsync();
     }
 
     public TabletopTournamentsDbContext CreateDbContext()
     {
         var options = new DbContextOptionsBuilder<TabletopTournamentsDbContext>()
-            .UseSqlServer(_connectionString)
+            .UseNpgsql(_connectionString)
             .Options;
 
         return new TabletopTournamentsDbContext(options);
     }
 
-    private static string GetSaPassword()
+    public async Task<NpgsqlConnection> OpenConnectionAsync()
     {
-        var password = Environment.GetEnvironmentVariable("SA_PASSWORD")
-            ?? Environment.GetEnvironmentVariable("MSSQL_SA_PASSWORD");
+        const int maximumAttempts = 20;
 
-        if (string.IsNullOrWhiteSpace(password))
+        for (var attempt = 1; attempt <= maximumAttempts; attempt++)
         {
-            password = TryReadSaPasswordFromDotEnv();
-        }
+            var connection = new NpgsqlConnection(_connectionString);
 
-        return string.IsNullOrWhiteSpace(password) ? "YourStrong!Passw0rd" : password;
-    }
-
-    private static string? TryReadSaPasswordFromDotEnv()
-    {
-        var directory = AppContext.BaseDirectory;
-
-        while (!string.IsNullOrWhiteSpace(directory))
-        {
-            var envPath = Path.Combine(directory, ".env");
-            if (File.Exists(envPath))
+            try
             {
-                foreach (var rawLine in File.ReadAllLines(envPath))
-                {
-                    var line = rawLine.Trim();
-                    if (line.StartsWith("#") || !line.StartsWith("SA_PASSWORD=", StringComparison.Ordinal))
-                    {
-                        continue;
-                    }
-
-                    return line["SA_PASSWORD=".Length..].Trim();
-                }
-
-                return null;
+                await connection.OpenAsync();
+                return connection;
             }
-
-            directory = Directory.GetParent(directory)?.FullName;
+            catch (NpgsqlException) when (attempt < maximumAttempts)
+            {
+                await connection.DisposeAsync();
+                await Task.Delay(TimeSpan.FromMilliseconds(250));
+            }
         }
 
-        return null;
+        throw new InvalidOperationException("PostgreSQL did not accept connections after starting.");
     }
 
     public async Task DisposeAsync()
     {
+        await _postgresContainer.DisposeAsync();
+    }
 
-        await _sqlContainer.DisposeAsync();
+    private async Task ApplyMigrationsAsync()
+    {
+        var migrationsDirectory = FindMigrationsDirectory();
+        var migrationPaths = Directory.GetFiles(migrationsDirectory, "*.sql")
+            .OrderBy(path => path, StringComparer.Ordinal)
+            .ToArray();
+
+        if (migrationPaths.Length == 0)
+        {
+            throw new InvalidOperationException($"No SQL migrations found in {migrationsDirectory}.");
+        }
+
+        await using var connection = await OpenConnectionAsync();
+        foreach (var migrationPath in migrationPaths)
+        {
+            var sql = await File.ReadAllTextAsync(migrationPath);
+            await using var command = new NpgsqlCommand(sql, connection);
+            await command.ExecuteNonQueryAsync();
+        }
+    }
+
+    private static string FindMigrationsDirectory()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+
+        while (directory is not null)
+        {
+            var candidate = Path.Combine(directory.FullName, "supabase", "migrations");
+            if (Directory.Exists(candidate))
+            {
+                return candidate;
+            }
+
+            directory = directory.Parent;
+        }
+
+        throw new DirectoryNotFoundException(
+            "The supabase/migrations directory could not be found from the test output path.");
     }
 }

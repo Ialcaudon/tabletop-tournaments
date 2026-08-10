@@ -9,14 +9,48 @@ namespace TabletopTournaments.Infrastructure.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Tournament> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.ToTable("tournaments", "tabletop");
+
+            builder.HasKey(x => x.Id)
+                .HasName("pk_tournaments");
+            builder.Property(x => x.Id)
+                .HasColumnName("id")
+                .ValueGeneratedOnAdd();
             builder.Property(x => x.Name)
+                .HasColumnName("name")
                 .HasMaxLength(200)
                 .IsRequired();
             builder.Property(x => x.Date)
+                .HasColumnName("date")
+                .HasColumnType("date")
                 .IsRequired();
+            builder.Property(x => x.GameSystem)
+                .HasColumnName("game_system")
+                .HasConversion<int>()
+                .IsRequired();
+
             builder.HasMany(x => x.Players)
-                .WithMany();
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "TournamentPlayer",
+                    right => right.HasOne<Player>()
+                        .WithMany()
+                        .HasForeignKey("player_id")
+                        .HasConstraintName("fk_tournament_players_player")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    left => left.HasOne<Tournament>()
+                        .WithMany()
+                        .HasForeignKey("tournament_id")
+                        .HasConstraintName("fk_tournament_players_tournament")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    join =>
+                    {
+                        join.ToTable("tournament_players", "tabletop");
+                        join.HasKey("tournament_id", "player_id")
+                            .HasName("pk_tournament_players");
+                        join.HasIndex("player_id")
+                            .HasDatabaseName("ix_tournament_players_player_id");
+                    });
         }
     }
 }

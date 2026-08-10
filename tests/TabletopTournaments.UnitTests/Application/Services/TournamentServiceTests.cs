@@ -12,6 +12,8 @@ namespace TabletopTournaments.UnitTests.Application.Services
 {
     public class TournamentServiceTests
     {
+        private static readonly DateOnly Today = DateOnly.FromDateTime(DateTime.Today);
+
         private readonly Mock<ITournamentRepository> _tournamentRepositoryMock;
         private readonly Mock<IPlayerRepository> _playerRepositoryMock;
         private readonly TournamentService _service;
@@ -27,7 +29,7 @@ namespace TabletopTournaments.UnitTests.Application.Services
         public async Task CreateTournamentAsync_ShouldCreateAndPersistTournament_WhenParametersAreValid()
         {
             var name = "Warhammer Fest";
-            var date = DateTime.Today.AddDays(30);
+            var date = Today.AddDays(30);
             var gameSystem = GameSystem.WarhammerAoS;
 
             int tournamentId = await _service.CreateTournamentAsync(name, date, gameSystem);
@@ -42,7 +44,7 @@ namespace TabletopTournaments.UnitTests.Application.Services
         [Fact]
         public async Task GetTournamentByIdAsync_ShouldReturnTournament_WhenTournamentExists()
         {
-            var tournament = new Tournament("Test Tournament", DateTime.Today.AddDays(10), GameSystem.Generic);
+            var tournament = new Tournament("Test Tournament", Today.AddDays(10), GameSystem.Generic);
             _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
 
             var result = await _service.GetTournamentByIdAsync(1);
@@ -65,7 +67,7 @@ namespace TabletopTournaments.UnitTests.Application.Services
         [Fact]
         public async Task AddPlayerToTournamentAsync_ShouldReturnTrue_WhenBothExist()
         {
-            var tournament = new Tournament("Test", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var tournament = new Tournament("Test", Today.AddDays(5), GameSystem.Generic);
             var player = new Player("John");
             _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
             _playerRepositoryMock.Setup(x => x.GetByIdAsync(2)).ReturnsAsync(player);
@@ -90,7 +92,7 @@ namespace TabletopTournaments.UnitTests.Application.Services
         [Fact]
         public async Task AddPlayerToTournamentAsync_ShouldReturnFalse_WhenPlayerNotFound()
         {
-            var tournament = new Tournament("Test", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var tournament = new Tournament("Test", Today.AddDays(5), GameSystem.Generic);
             _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
             _playerRepositoryMock.Setup(x => x.GetByIdAsync(2)).ReturnsAsync((Player?)null);
 
@@ -102,10 +104,10 @@ namespace TabletopTournaments.UnitTests.Application.Services
         [Fact]
         public async Task UpdateTournamentAsync_ShouldReturnTrue_WhenTournamentExists()
         {
-            var tournament = new Tournament("Old Name", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var tournament = new Tournament("Old Name", Today.AddDays(5), GameSystem.Generic);
             _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
 
-            var newDate = DateTime.Today.AddDays(15);
+            var newDate = Today.AddDays(15);
             var result = await _service.UpdateTournamentAsync(1, "New Name", newDate, GameSystem.WarhammerAoS);
 
             result.Should().BeTrue();
@@ -120,7 +122,7 @@ namespace TabletopTournaments.UnitTests.Application.Services
         {
             _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(999)).ReturnsAsync((Tournament?)null);
 
-            var result = await _service.UpdateTournamentAsync(999, "Name", DateTime.Today, GameSystem.Generic);
+            var result = await _service.UpdateTournamentAsync(999, "Name", Today, GameSystem.Generic);
 
             result.Should().BeFalse();
             _tournamentRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Tournament>()), Times.Never);
@@ -129,7 +131,7 @@ namespace TabletopTournaments.UnitTests.Application.Services
         [Fact]
         public async Task DeleteTournamentAsync_ShouldReturnTrue_WhenTournamentExists()
         {
-            var tournament = new Tournament("To Delete", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var tournament = new Tournament("To Delete", Today.AddDays(5), GameSystem.Generic);
             _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
 
             var result = await _service.DeleteTournamentAsync(1);
@@ -152,7 +154,7 @@ namespace TabletopTournaments.UnitTests.Application.Services
         [Fact]
         public async Task RemovePlayerFromTournamentAsync_ShouldReturnTrue_WhenBothExistAndPlayerIsRegistered()
         {
-            var tournament = new Tournament("Test", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var tournament = new Tournament("Test", Today.AddDays(5), GameSystem.Generic);
             var player = new Player("John");
             tournament.AddPlayer(player);
             _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
@@ -178,7 +180,7 @@ namespace TabletopTournaments.UnitTests.Application.Services
         [Fact]
         public async Task RemovePlayerFromTournamentAsync_ShouldReturnFalse_WhenPlayerNotInTournament()
         {
-            var tournament = new Tournament("Test", DateTime.Today.AddDays(5), GameSystem.Generic);
+            var tournament = new Tournament("Test", Today.AddDays(5), GameSystem.Generic);
             var player = new Player("John");
             _tournamentRepositoryMock.Setup(x => x.GetByIdAsync(1)).ReturnsAsync(tournament);
             _playerRepositoryMock.Setup(x => x.GetByIdAsync(2)).ReturnsAsync(player);

@@ -8,7 +8,7 @@ namespace TabletopTournaments.Core.Entities
     {
         public int Id { get; private set; }
         public string Name { get; private set; }
-        public DateTime Date { get; private set; }
+        public DateOnly Date { get; private set; }
         public GameSystem GameSystem { get; private set; }
 
         private readonly List<Player> _players = new();
@@ -16,7 +16,7 @@ namespace TabletopTournaments.Core.Entities
 
         protected Tournament() { }
 
-        public Tournament(string name, DateTime date, GameSystem gameSystem)
+        public Tournament(string name, DateOnly date, GameSystem gameSystem)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Tournament name cannot be empty", nameof(name));
@@ -26,7 +26,7 @@ namespace TabletopTournaments.Core.Entities
             GameSystem = gameSystem;
         }
 
-        public void Update(string name, DateTime date, GameSystem gameSystem)
+        public void Update(string name, DateOnly date, GameSystem gameSystem)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Tournament name cannot be empty", nameof(name));
