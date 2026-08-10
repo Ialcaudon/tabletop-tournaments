@@ -1,53 +1,75 @@
 # Tabletop Tournaments
 
-A Clean Architecture based .NET 8 Web API for managing tabletop tournaments.
+Aplicación para gestionar torneos de juegos de mesa, formada por una API de
+ASP.NET Core y un frontend Blazor Web App con componentes interactivos de
+servidor.
 
-## Prerequisites
+## Requisitos previos
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [Visual Studio Code](https://code.visualstudio.com/) (Recommended)
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [Docker](https://www.docker.com/) para la base de datos local y las pruebas de
+  integración
 
-## Getting Started
+## Primeros pasos
 
-### 1. Clone the repository
+### 1. Clonar el repositorio
+
 ```bash
 git clone https://github.com/Ialcaudon/tabletop-tournaments.git
 cd tabletop-tournaments
 ```
 
-### 2. Build the project
+### 2. Compilar la solución
+
 ```bash
 dotnet build
 ```
 
-### 3. Run the project
+### 3. Arrancar la API y el frontend
 
-#### Using Terminal (Universal)
-This works in any editor or terminal.
+La forma más sencilla de iniciar ambos proyectos desde la raíz del repositorio
+es:
+
 ```bash
-dotnet run --project TabletopTournaments.API/TabletopTournaments.API.csproj --launch-profile https
+./start-dev.sh
 ```
-The application will start and listen on the configured ports (usually **https://localhost:7187**).
 
-#### Using VS Code (Optional)
-If your editor supports VS Code compatible launch configurations (like the `.vscode` folder):
-1. Open the "Run and Debug" panel.
-2. Select **.NET Core Launch (web)**.
-3. Start debugging.
+Los servicios quedan disponibles en:
 
-## API Documentation (Swagger)
+- Frontend Blazor: `http://localhost:5067`
+- API y Swagger: `http://localhost:5102/swagger`
 
-When running in **Development** mode (which is default for VS Code launch), Swagger UI is available at:
+Pulsa `Ctrl+C` en la terminal para detener ambos procesos.
 
+## Arrancar el frontend por separado
+
+El frontend consume la API por HTTP, por lo que para utilizar todas sus
+funcionalidades la API también debe estar en ejecución. Inicia cada proyecto en
+una terminal distinta.
+
+Terminal 1, API:
+
+```bash
+dotnet run --project src/TabletopTournaments.API/TabletopTournaments.API.csproj --launch-profile http
 ```
-https://localhost:7187/swagger
+
+Terminal 2, frontend:
+
+```bash
+dotnet run --project src/TabletopTournaments.Web/TabletopTournaments.Web.csproj --launch-profile http
 ```
-*(Note: Port may vary, check your `launchSettings.json` or terminal output)*
 
-## Project Structure
+En el entorno de desarrollo, el frontend utiliza la dirección de la API definida
+en `src/TabletopTournaments.Web/appsettings.Development.json` y se abre en
+`http://localhost:5067`.
 
-- **Core**: Domain entities, interfaces, and business logic.
-- **Application**: Application use cases (CQRS Commands/Queries).
-- **Infrastructure**: Implementation of interfaces (Initial Repositories, etc.).
-- **API**: ASP.NET Core Web API entry point.
-- **UnitTests**: Unit tests for Core and Application layers.
+## Estructura del proyecto
+
+- **Core:** entidades de dominio e interfaces de repositorio.
+- **Application:** casos de uso y servicios de aplicación.
+- **Infrastructure:** persistencia e implementaciones de los repositorios.
+- **API:** backend ASP.NET Core y raíz de composición.
+- **Web:** frontend Blazor que consume la API mediante clientes `HttpClient`
+  tipados.
+- **UnitTests:** pruebas unitarias de Core y Application.
+- **IntegrationTests:** pruebas de persistencia mediante Testcontainers.
