@@ -5,15 +5,22 @@
 
 **Prioridad:** ALTA  
 
-**Estado:** DONE  
+**Estado:** IN_PROGRESS
 
-**Tasks:**
+**Tareas:**
 - Setear conexion a base de datos en appsettings para producción.
 - Setar variables de entorno para conexión a base de datos en el entorno de producción.
   - ASPNETCORE_ENVIRONMENT=Production
   - ConnectionStrings__DefaultConnection
-- La cadena de conexion la extraemos de supabase que es el servicio de base de datos que vamos a usar en producción.
-- Usermos postgre SQL, debemos hacer las migraciones necesarias en docker para que nos funcione en local y en producción.
-- Setear migraciones de base de datos en el arranque de la aplicacion
+- [ ] Obtener de Supabase la cadena de conexión PostgreSQL para producción y
+  almacenarla como secreto de Render.
+- [ ] Usar conexión directa para migraciones y elegir conexión directa o el
+  pooler de sesión para la API según la conectividad IPv6 de Render.
+- [ ] Aplicar las migraciones como un paso explícito del despliegue; la API no
+  migrará la base de datos durante el arranque.
 - Ya esta configurado Render como proveedor cloud
 - Renombrado repositories en el proyecto de backend. Ya no es un InmemoryRepository, debemos utilizar el que levantamos con docker
+
+La estrategia de base de datos está definida en
+[ADR 0001](../../docs/adr/0001-usar-supabase-postgresql.md). La implementación se
+realiza en la historia 001-005.

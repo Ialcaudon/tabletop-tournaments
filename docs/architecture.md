@@ -1,57 +1,98 @@
-# Tabletop Tournaments Architecture
+# Arquitectura de Tabletop Tournaments
 
-## Overview
-This project follows a simplified Domain-Driven Design (DDD) architecture for a .NET 9 Web API managing tabletop tournaments. The system allows users to create and manage tournaments, players, and related entities.
+## Registros de decisiones arquitectónicas
 
-## Layers
-- **Core/Domain**: Contains domain entities, value objects, interfaces, and enums. Entities enforce business rules with private setters and constructor validation.
-- **Application**: Houses application services that orchestrate domain logic and handle use cases. Services inject repositories to perform operations.
-- **Infrastructure**: Implements repository interfaces using EF Core (currently transitioning from in-memory to SQL Server). Includes DbContext and entity configurations.
-- **API**: ASP.NET Core controllers that inject services and handle HTTP requests/responses.
-- **Web (Blazor)**: Blazor Web App (.NET 9, Interactive Server) that consumes the API via typed HttpClient services. Contains Razor components for UI (Pages, Layout) and service clients (TournamentApiClient, PlayerApiClient).
-- **UnitTests**: xUnit tests with Moq and FluentAssertions for unit testing services and domain logic.
-- **IntegrationTests**: Implemented for end-to-end testing of infrastructure and API interactions.
+- [ADR 0001: Usar Supabase PostgreSQL como plataforma de base de datos](adr/0001-usar-supabase-postgresql.md)
 
-## Key Patterns
-- **Entities**: Use private setters and public constructors for validation (e.g., `Tournament(string name, DateTime date, GameSystem gameSystem)`).
-- **Application Services**: Inject repositories; handle business logic (e.g., `TournamentService.CreateTournament(...)`).
-- **Repositories**: Interfaces in Core, implementations in Infrastructure. Currently in-memory with reflection for ID assignment; transitioning to EF Core with SQL Server.
-- **Controllers**: Inject services; return IActionResult (CreatedAtAction for POST, Ok for GET).
-- **Tests**: Unit tests mock repositories; integration tests will verify database interactions.
+La implementación actual todavía utiliza SQL Server. El ADR 0001 define la
+arquitectura objetivo y el plan de transición a Supabase PostgreSQL. Este trabajo
+se realiza por etapas para no presentar decisiones previstas como si ya
+estuvieran desplegadas.
 
-## Workflows
-- Build: `dotnet build`
-- Run: `dotnet run --project TabletopTournaments.API/TabletopTournaments.API.csproj --launch-profile https`
-- Test: `dotnet test` (unit and integration)
-- Debug: Use VS Code launch config ".NET Core Launch (web)"
+## Visión general
 
-## Domain Models Review
-- **Tournament**: Correctly implements private setters, protected EF constructor, and validation in public constructor.
-- **Player**: Has private setters and validation, but lacks a protected EF constructor. Recommend adding `protected Player() { }` to align with EF Core requirements.
-- **GameSystem**: Simple enum for tournament types.
+El proyecto aplica una arquitectura de dominio simplificada sobre .NET 9. El
+sistema permite crear y administrar torneos, jugadores y sus inscripciones.
 
-Ensure all entities follow this pattern for EF Core compatibility.
+```text
+Blazor Web ──HTTP──> API ──> Application ──> Core
+                         └──> Infrastructure ──> Base de datos
+                                      └───────> Core
+```
 
-## Integration Tests Proposal
-To ensure the infrastructure layer correctly persists data to the database, we propose adding integration tests. These tests will validate end-to-end functionality, including database insertions.
+## Capas
 
-### Structure
-- Create a new project: `TabletopTournaments.IntegrationTests` in the `tests/` folder.
-- Use xUnit, FluentAssertions, and Microsoft.AspNetCore.Mvc.Testing for API tests.
-- Configure a test database (e.g., SQL Server via Docker Compose or local instance) to avoid affecting production data.
+- **Core:** contiene las entidades de dominio, el enum de sistemas de juego y
+  las interfaces de repositorio. No depende de otros proyectos de la solución.
+- **Application:** implementa los casos de uso mediante servicios de aplicación
+  que dependen de las interfaces definidas en Core.
+- **Infrastructure:** implementa los repositorios y el `DbContext` mediante
+  Entity Framework Core. Actualmente usa SQL Server y migrará a Npgsql y
+  PostgreSQL.
+- **API:** expone controladores ASP.NET Core y actúa como raíz de composición para
+  registrar servicios, repositorios y persistencia.
+- **Web:** es una aplicación Blazor con componentes interactivos de servidor.
+  Consume la API mediante clientes `HttpClient` tipados y no referencia los
+  proyectos internos del backend.
 
-### Patterns
-- **Repository Tests**: Directly test repository implementations by injecting DbContext and verifying database state after operations.
-- **API Tests**: Use TestServer to simulate HTTP requests and assert responses, including checking database changes.
-- **Setup/Teardown**: Use fixtures to initialize/cleanup test data. For example, reset database state between tests.
-- **Database Verification**: After operations, query the database to confirm insertions/updates (e.g., using EF Core or raw SQL).
+## Proyectos de pruebas
 
-### Example Workflow
-1. Start test database (e.g., via Docker Compose).
-2. Run tests: `dotnet test TabletopTournaments.IntegrationTests/TabletopTournaments.IntegrationTests.csproj`
-3. Tests should cover CRUD operations on entities like Tournament and Player.
+- **UnitTests:** prueba entidades y servicios con xUnit, Moq y
+  FluentAssertions. Los repositorios se sustituyen por mocks.
+- **IntegrationTests:** prueba directamente los repositorios de infraestructura
+  contra SQL Server mediante Testcontainers. Todavía no realiza pruebas HTTP de
+  extremo a extremo.
 
-### Dependencies
-- Add packages: xunit, FluentAssertions, Microsoft.AspNetCore.Mvc.Testing, Microsoft.EntityFrameworkCore.SqlServer (for tests).
+Como parte de la transición a Supabase, las pruebas de integración pasarán a
+PostgreSQL y aplicarán las migraciones SQL versionadas en lugar de utilizar
+`EnsureCreated`.
 
-This ensures the transition to SQL Server (as per story 001-002) is validated through automated tests.
+## Patrones principales
+
+- Las entidades protegen sus propiedades con setters privados y validan sus
+  invariantes en constructores y métodos de dominio.
+- Los servicios de aplicación coordinan entidades y repositorios.
+- Las interfaces de repositorio se encuentran en Core y sus implementaciones en
+  Infrastructure.
+- Los controladores traducen peticiones HTTP a llamadas de servicios de
+  aplicación.
+- Blazor utiliza DTO propios y se comunica con el backend exclusivamente por
+  HTTP.
+
+## Estado de la persistencia
+
+La configuración vigente registra `TabletopTournamentsDbContext` con SQL Server.
+Los repositorios EF están activos; las implementaciones InMemory permanecen en el
+repositorio, pero no están registradas en la aplicación.
+
+La arquitectura objetivo conservará EF Core como ORM y cambiará el proveedor a
+Npgsql. El esquema se versionará en `supabase/migrations` y la API será el único
+componente con acceso directo a PostgreSQL.
+
+## Ejecución actual
+
+Desde la raíz del repositorio se pueden iniciar API y Blazor con:
+
+```bash
+./start-dev.sh
+```
+
+Los endpoints locales actuales son:
+
+- API y Swagger: `http://localhost:5102/swagger`
+- Blazor: `http://localhost:5067`
+
+La base de datos y las instrucciones de ejecución cambiarán en los siguientes
+bloques de la migración a PostgreSQL.
+
+## Pruebas actuales
+
+Las suites pueden ejecutarse por separado:
+
+```bash
+dotnet test tests/TabletopTournaments.UnitTests
+dotnet test tests/TabletopTournaments.IntegrationTests
+```
+
+Las pruebas de integración requieren Docker porque levantan un contenedor de
+base de datos mediante Testcontainers.
