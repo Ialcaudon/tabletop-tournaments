@@ -1,44 +1,28 @@
-# AI Coding Guidelines for Tabletop Tournaments
+# Instrucciones de desarrollo para Tabletop Tournaments
 
-## Architecture Overview
-This is a simplified Domain-Driven Design (DDD) .NET 9 Web API. Layers:
-- **Core/Domain**: Domain entities, value objects, interfaces, enums. Entities use private setters and constructor validation.
-- **Application**: Application services that orchestrate domain logic and handle use cases.
-- **Infrastructure**: Repository implementations with EF Core (SQL Server), DbContext and entity configs. In-memory repos kept for reference.
-- **API**: ASP.NET Core controllers injecting services directly.
-- **UnitTests**: xUnit tests with Moq and FluentAssertions.
-- **IntegrationTests**: xUnit tests for end-to-end validation of infrastructure (e.g., repository persistence to SQL Server).
+La fuente principal de instrucciones para agentes y asistentes es `AGENTS.md`.
+Lee también `docs/architecture.md`, los ADR aplicables y la historia relevante
+del backlog antes de implementar cambios.
 
-## Key Patterns
-- Entities: Private setters, protected EF constructor, validation in public constructor, e.g., `Tournament(string name, DateTime date, GameSystem gameSystem)`.
-- Application Services: Inject repositories, handle business logic, e.g., `TournamentService.CreateTournament(name, date, gameSystem)`.
-- Repositories: Interfaces in Core, implementations in Infrastructure; in-memory uses reflection for ID assignment.
-- Controllers: Inject services, call service methods, return IActionResult with CreatedAtAction for POSTs, Ok for GETs.
+## Convenciones principales
 
-## Workflows
-- **Build**: `dotnet build` or VS Code task "build".
-- **Run**: `dotnet run --project TabletopTournaments.API/TabletopTournaments.API.csproj --launch-profile https` (Swagger at https://localhost:7187/swagger).
-- **Watch**: `dotnet watch run --project TabletopTournaments.API/TabletopTournaments.API.csproj`.
-- **Test**: `dotnet test` in UnitTests project.
-- **Debug**: Use VS Code launch config ".NET Core Launch (web)" with preLaunchTask "build".
+- Documentación, backlog y textos funcionales en español; código e identificadores
+  en inglés.
+- Nullable e implicit usings habilitados.
+- Entidades con setters privados, constructor protegido para EF Core y validación
+  en constructores o métodos de dominio.
+- Interfaces de repositorio en Core e implementaciones en Infrastructure.
+- Servicios de aplicación registrados según su ciclo de vida y repositorios como
+  scoped.
+- Comentarios sólo cuando aporten contexto que el código no pueda expresar.
+- Pruebas unitarias con xUnit, Moq y FluentAssertions.
+- Pruebas de integración contra el motor real y aplicando migraciones versionadas.
 
-## Conventions
-- Nullable enabled, implicit usings.
-- GameSystem enum for tournament types (Generic, WarhammerAoS, etc.).
-- In-memory repos use reflection for ID assignment (temporary hack).
-- EF DbContext with entity configurations in Infrastructure.
-- Tests mock repositories, verify service calls with FluentAssertions.
-- Name methods/classes descriptively, follow C# conventions.
-- No comments unless necessary for clarity.
-- Register services as transient, repos as scoped in Startup.cs.
+## Entrega
 
-## Examples
-- New feature: Add service method in Application/Services/, inject in controller, register in Startup.cs.
-- Entity: Add to Core/Entities/, with private setters and validation.
-- Test: Mock repo, assert service calls repo methods with correct parameters.
-
-## Backlog Management
-- When completing a story or task, update its **Estado** to `DONE` in the corresponding `backlog/stories/` markdown file.
-- Mark individual tasks with `[x]` when completed.
-- This must be done as part of finishing any implementation work — do not forget.</content>
-<parameter name="filePath">/Users/ignacio/Repos/tabletop-tournaments/.github/copilot-instructions.md
+- Desarrollo basado en tronco sobre `main`.
+- Sin ramas ni pull requests por defecto.
+- Commits pequeños, coherentes e integrables.
+- Pruebas y feature toggles para controlar el riesgo de cambios graduales.
+- Actualización del backlog y la documentación como parte del cambio que los
+  afecte.
